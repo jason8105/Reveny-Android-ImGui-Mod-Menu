@@ -3,8 +3,8 @@ plugins {
 }
 
 android {
+    namespace 'com.reveny.modmenu'
     compileSdk 34
-    ndkVersion "25.2.9519653"
 
     defaultConfig {
         applicationId "com.reveny.modmenu"
@@ -12,17 +12,6 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
-        externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++17 -frtti -fexceptions"
-                arguments "-DANDROID_STL=c++_shared"
-            }
-        }
-
-        ndk {
-            abiFilters 'arm64-v8a'
-        }
     }
 
     buildTypes {
@@ -42,11 +31,9 @@ android {
         }
     }
 
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['src/main/jniLibs']
-            jni.srcDirs = []
-        }
+    ndkVersion '25.2.9519653'
+    buildFeatures {
+        prefab true
     }
 }
 
@@ -56,14 +43,12 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('assembleMagisk', Copy) {
+    from 'build/intermediates/cmake/debug/obj/arm64-v8a'
+    into 'src/main/jniLibs/arm64-v8a'
+    include '**/*.so'
 }
 
-task zipRelease(type: Zip) {
-    from 'build/outputs/apk/debug'
-    archiveFileName = "Reveny-Mod-Menu-${versionName}.zip"
-    destinationDirectory = file("$rootDir/release")
-}
+assembleMagisk.dependsOn assembleDebug
 
 === END FILE ===

@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <application>
-        <meta-data
-            android:name="magiskModuleInfo"
-            android:value="RevenyModMenu|1|Zygisk ImGui Mod Menu"/>
-        <meta-data
-            android:name="zygisk"
-            android:value="true"/>
-    </application>
 </manifest>
+=== END FILE ===

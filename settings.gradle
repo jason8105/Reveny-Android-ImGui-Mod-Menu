@@ -12,6 +12,6 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-
-rootProject.name = "Reveny-Android-ImGui-Mod-Menu"
+rootProject.name = "RevenyModMenu"
 include ':module'
+=== END FILE ===

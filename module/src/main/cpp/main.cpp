@@ -1,33 +1,25 @@
-#define ZYGISK_API_IMPLEMENTATION
-#include <zygisk.hpp>
-#include <imgui/imgui.h>
-#include <hook/HookEngine.h>
-#include <hook/TouchHook.h>
-#include <hook/GraphicsHook.h>
+#include <jni.h>
+#include <string>
+#include <dlfcn.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/system_properties.h>
 
-class RevenyModule : public zygisk::ModuleBase {
-public:
-    void onLoad(zygisk::Api* api, JNIEnv* env) override {
-        api->setOption(zygisk::Option::PRE_INIT, nullptr);
-        api->setOption(zygisk::Option::APP_DATA_DIR, nullptr);
-        api->setOption(zygisk::Option::FORCE_DENYLIST_UNMOUNT, nullptr);
-        
-        // Initialize hooks for Android apps
-        HookEngine::Initialize();
-        TouchHook::Initialize();
-        
-        LOGD("Reveny Zygisk Module Loaded");
-    }
-    
-    void preAppSpecialize(zygisk::SpecializeInfo* info) override {
-        // Handle app specialization
-        HookEngine::PreAppSpecialize(info);
-    }
-    
-    void postAppSpecialize(const zygisk::SpecializeInfo* info) override {
-        // Handle post specialization
-        HookEngine::PostAppSpecialize(info);
-    }
-};
+extern "C" {
+    void hook_init();
+    void hook_cleanup();
+}
 
-REGISTER_ZYGISK_MODULE(RevenyModule)
+static void* thread_func(void* arg) {
+    sleep(3);
+    hook_init();
+    return nullptr;
+}
+
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_init(JNIEnv* env, jobject thiz) {
+    pthread_t thread;
+    pthread_create(&thread, nullptr, thread_func, nullptr);
+}
+}
+=== END FILE ===
