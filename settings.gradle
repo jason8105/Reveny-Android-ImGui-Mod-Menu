@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Reveny-Android-ImGui-Mod-Menu"
 include ':app'
+include ':module'
