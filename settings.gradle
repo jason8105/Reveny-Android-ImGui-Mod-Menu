@@ -5,16 +5,13 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
     }
 }
 
-rootProject.name = "Reveny-Android-ImGui-Mod-Menu"
-include ':module'
-=== END FILE ===
+rootProject.name = "ZygiskImGuiTouch"
+include ':app'

@@ -1,46 +1,52 @@
-cmake_minimum_required(VERSION 3.22)
-project(imgui_mod)
+cmake_minimum_required(VERSION 3.22.1)
+
+project(ZygiskImGuiTouch)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/imgui
-    ${CMAKE_SOURCE_DIR}/kittymemory
+add_library(
+    zygisk_imgui_touch
+    SHARED
+    src/main/cpp/native-lib.cpp
+    src/main/cpp/hook_engine.cpp
+    src/main/cpp/imgui_hook.cpp
+    src/main/cpp/touch_hook.cpp
+    src/main/cpp/zygisk_hook.cpp
 )
 
-# ImGui sources
-file(GLOB IMGUI_SOURCES
-    imgui/*.cpp
-    imgui/backends/imgui_impl_android.cpp
-    imgui/backends/imgui_impl_opengl3.cpp
-)
-
-add_library(imgui STATIC ${IMGUI_SOURCES})
-target_include_directories(imgui PUBLIC imgui)
-
-# Dobby sources
-add_library(dobby STATIC
-    dobby/dobby.cpp
-)
-
-add_library(kitty_memory STATIC
-    kittymemory/memory.h
-    kittymemory/detection.h
-)
-
-# Main hook library
-add_library(reveny_hook SHARED
-    src/main/jni/main.cpp
-)
-
-target_link_libraries(reveny_hook
-    imgui
-    dobby
-    kitty_memory
-    android
+find_library(
+    log-lib
     log
+)
+
+find_library(
+    android-lib
+    android
+)
+
+find_library(
+    egl-lib
     EGL
+)
+
+find_library(
+    gpu-lib
     GLESv2
+)
+
+find_library(
+    input-lib
+    input
+)
+
+target_link_libraries(
+    zygisk_imgui_touch
+    ${log-lib}
+    ${android-lib}
+    ${egl-lib}
+    ${gpu-lib}
+    ${input-lib}
+    jnigraphics
 )

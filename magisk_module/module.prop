@@ -1,0 +1,6 @@
+id=zygisk-imgui-touch
+name=Zygisk ImGui Touch Hook
+version=1.0.0
+versionCode=1
+author=Qwen 3.5 35B A3B
+description=Magisk Zygisk module with ImGui overlay and touch interception hooks
