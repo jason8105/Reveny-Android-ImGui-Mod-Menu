@@ -1,27 +1,27 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-project("RevenyModMenu")
+project("RevenyImGui")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
+find_package(log REQUIRED)
+
+add_library(
+    reveny
+    SHARED
     src/main/cpp/main.cpp
-    src/main/cpp/HookEngine.cpp
-    src/main/cpp/TouchHook.cpp
-    src/main/cpp/ImGuiHook.cpp
+    src/main/cpp/hook.cpp
+    src/main/cpp/imgui.cpp
+    src/main/cpp/touch_hook.cpp
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/../jni
-)
-
-find_library(log-lib log)
-
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    ${log-lib}
-    z
-    m
+target_link_libraries(
+    reveny
+    log
+    android
+    EGL
+    GLESv3
 )
 === END FILE ===

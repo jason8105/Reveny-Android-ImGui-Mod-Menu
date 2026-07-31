@@ -15,7 +15,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17 -fexceptions -frtti"
+                cppFlags "-std=c++17 -fpermissive"
                 arguments "-DANDROID_STL=c++_shared"
             }
         }
@@ -42,14 +42,14 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+    buildFeatures {
+        prefab true
     }
 }
 
 dependencies {
-    implementation 'com.github.YTModz:Zygisk-ImGui:1.0.0'
-    implementation 'com.github.YTModz:Zygisk-PltHook:1.0.0'
+    implementation 'com.github.tiann:FreeReflection:3.1.0'
+    implementation 'com.github.tiann:FreeCpu:1.0.0'
+    implementation 'com.github.tiann:FreeLog:1.0.0'
 }
 === END FILE ===

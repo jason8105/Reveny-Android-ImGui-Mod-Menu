@@ -1,19 +1,58 @@
 #include <jni.h>
-#include <dlfcn.h>
 #include <string>
-#include <thread>
-#include <chrono>
+#include <dlfcn.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <sys/system_properties.h>
 
-extern "C" {
-    void __attribute__((constructor)) zygisk_entry();
+#include "hook.h"
+#include "touch_hook.h"
+#include "imgui_impl.h"
+
+static bool g_initialized = false;
+static pthread_t g_hook_thread;
+
+void init_hooks() {
+    if (g_initialized) return;
+    
+    HookEngine::init();
+    TouchHook::init();
+    ImGuiImpl::init();
+    
+    g_initialized = true;
 }
 
-void __attribute__((constructor)) zygisk_entry() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+void deinit_hooks() {
+    if (!g_initialized) return;
     
-    void* handle = dlopen("libandroid.so", RTLD_NOW);
-    if (handle) {
-        dlclose(handle);
+    ImGuiImpl::deinit();
+    TouchHook::deinit();
+    HookEngine::deinit();
+    
+    g_initialized = false;
+}
+
+void* hook_thread_func(void* arg) {
+    init_hooks();
+    
+    while (true) {
+        usleep(100000);
     }
+    
+    return nullptr;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_initModMenu(JNIEnv* env, jobject /* this */) {
+    if (!g_initialized) {
+        pthread_create(&g_hook_thread, nullptr, hook_thread_func, nullptr);
+    }
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_cleanupModMenu(JNIEnv* env, jobject /* this */) {
+    deinit_hooks();
 }
 === END FILE ===

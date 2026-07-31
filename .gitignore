@@ -2,7 +2,7 @@
 build/
 *.apk
 *.aab
-*.so
-.DS_Store
+*.iml
+.idea/
 local.properties
 === END FILE ===
