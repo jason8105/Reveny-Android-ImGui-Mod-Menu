@@ -229,7 +229,7 @@ def get_workflow_logs(run_id, max_retries=5):
                         continue
                     clean_lines.append(line)
                     
-                final_error_block = "\n".join(clean_lines[-400:])
+                final_error_block = "\n".join(clean_lines[-300:])
                 
                 try:
                     with open("clean_errors.txt", "w", encoding="utf-8") as lf:
