@@ -88,8 +88,8 @@ print("==================================================")
 _owner = input("Enter GitHub Username/Owner (Press Enter for 'jason8105'): ").strip()
 REPO_OWNER = _owner if _owner else "jason8105"
 
-_repo = input("Enter Repository Name (Press Enter for 'Reveny-Android-ImGui-Mod-Menu'): ").strip()
-REPO_NAME = _repo if _repo else "Reveny-Android-ImGui-Mod-Menu"
+_repo = input("Enter Repository Name (Press Enter for 'Zygisk-imgui-touch-fix'): ").strip()
+REPO_NAME = _repo if _repo else "Zygisk-imgui-touch-fix"
 
 print(f"\n[*] Target Repository set to: {REPO_OWNER}/{REPO_NAME}")
 print("==================================================\n")
@@ -152,7 +152,7 @@ def check_artifact_size(run_id):
     return True
 
 def get_workflow_logs(run_id, max_retries=5):
-    print("[*] Fetching failed job details to get direct text logs...")
+    print("[*] Fetching failed job details to get direct text logs via GitHub API...")
     jobs_url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/runs/{run_id}/jobs"
 
     for attempt in range(max_retries):
@@ -164,7 +164,7 @@ def get_workflow_logs(run_id, max_retries=5):
                 continue
 
             jobs = res.json().get("jobs", [])
-            all_logs = ""
+            failed_logs = ""
 
             for job in jobs:
                 if job.get("conclusion") == "failure":
@@ -174,18 +174,31 @@ def get_workflow_logs(run_id, max_retries=5):
 
                     log_res = requests.get(log_url, headers=HEADERS_GH, allow_redirects=True, timeout=150)
                     if log_res.status_code == 200:
-                        all_logs += f"\n=== Job: {job['name']} ===\n" + log_res.text
+                        failed_logs += f"\n=== Job: {job['name']} ===\n" + log_res.text
                         print(f"[*] Log downloaded successfully for {job['name']}")
                     else:
                         print(f"[!] Failed to get log text. Status {log_res.status_code}")
 
-            if all_logs:
+            if failed_logs:
+                # Clean noise completely (progress bars, downloads, unzipping, license boilerplate) and grab the last 400 clean lines
+                lines = failed_logs.splitlines()
+                clean_lines = []
+                
+                for line in lines:
+                    if "[" in line and "%" in line:
+                        continue
+                    if any(noise in line for noise in ["Downloading", "Unzipping", "Loading local repository", "Accept? (y/N)", "Terms and Conditions", "License Agreement"]):
+                        continue
+                    clean_lines.append(line)
+                    
+                final_error_block = "\n".join(clean_lines[-400:])
+                
                 try:
-                    with open("last_failed_log.txt", "w", encoding="utf-8") as lf:
-                        lf.write(all_logs)
+                    with open("clean_errors.txt", "w", encoding="utf-8") as lf:
+                        lf.write(final_error_block)
                 except Exception:
                     pass
-                return all_logs
+                return final_error_block
             else:
                 return "Empty logs or no failure found."
 
@@ -196,26 +209,27 @@ def get_workflow_logs(run_id, max_retries=5):
     return "Log fetch error: Network timeout."
 
 # ==========================================
-# VENICE AI LOGIC (PRIVATE & TOKEN EFFICIENT)
+# VENICE AI LOGIC (ZYGISK + IMGUI + TOUCH FIX)
 # ==========================================
 def ask_venice_api(error_logs):
     prompt = f"""
-You are an elite Android NDK, C++, Gradle, and Zygisk module build engineer.
-Your mission is to transform this repository from a standard Android app into a fully functional, clean, flashable Magisk Zygisk module zip.
+You are an elite Android NDK, C++, Gradle, and Zygisk module build engineer specializing in native game mod menus, ImGui overlays, and touch injection hooks.
+Your mission is to fix build, compilation, and packaging errors for this Magisk Zygisk ImGui + Touch Fix module repository.
 
-CRITICAL REQUIREMENTS:
-1. PRESERVE EXISTING TOUCH FIX: This repository ALREADY contains a working native touch fix and ImGui hook. DO NOT modify, overwrite, or attempt to implement a new touch input logic. Leave the existing C++ touch interception code completely intact.
-2. CONVERT TO ZYGISK & CLEANUP JUNK: Remove unnecessary Java test app files, dummy activities, and bloatware that conflict with Zygisk packaging.
-3. PACKAGE NAME TARGETING & DEBUG: Create or modify the Zygisk entry point (`zygisk::ModuleBase`) to include Zygisk debug logging (using `<android/log.h>`). Implement `preAppSpecialize` to target application package names correctly.
-4. BUILD HEALING & PACKAGING FIX: Ensure the compiled native shared library is packed correctly into the final Magisk module zip structure under `zygisk/<abi>.so`. Fix Gradle/CMake output paths so the final zip file size is correct and contains all compiled binaries (avoiding empty 700-byte zips).
-5. MAGISK 24-26 COMPATIBILITY: Target Magisk versions 24 through 26 exclusively. Ensure `module.prop` sets `minMagisk` to `24000`.
+CRITICAL ARCHITECTURAL REQUIREMENTS:
+1. PRESERVE & FIX EXISTING HOOKS: The repository contains native touch interception and ImGui rendering logic. Fix any C++ compilation errors (such as missing namespace members like `HookEngine::PltHookAllModules`, incorrect `ImGui::SetNextWindowPos`/`SetNextWindowSize` syntax, or `TouchHook` scope resolutions) without breaking the core overlay loop.
+2. IMGUI & GRAPHICS HOOK: Ensure the ImGui context is correctly initialized and rendered inside the graphics hook (e.g., `eglSwapBuffers` or Vulkan swapchain hook). Keep rendering calls compatible with the target C++17 standard.
+3. TOUCH INTERCEPTION: Maintain the touch hook logic (e.g., hooking `AInputQueue_getEvent` or similar input queues) so the ImGui menu receives touch events properly while letting gameplay touches pass through when the menu is closed.
+4. ZYGISK & MAGISK PACKAGING: Ensure the compiled native library (`.so`) is properly exported, built for `arm64-v8a`, and packaged correctly into the final Magisk module structure (`zygisk/arm64-v8a.so` or standard module folders) so the generated zip is clean and valid.
 
-You MUST provide a short, descriptive git commit message summarizing your fix using this exact format:
+STRICT OUTPUT INSTRUCTIONS:
+- DO NOT ask clarifying questions. DO NOT output conversational text, explanations, or markdown prose outside the blocks.
+- You MUST output the exact file modifications using the strict file block formats specified below.
+
+You MUST provide a short git commit message summary using this exact format:
 === COMMIT: [Your descriptive commit message here] ===
 
-You MUST output the exact file modifications or deletions using these exact block formats:
-
-To modify or create a file:
+Use these exact block formats for files:
 === FILE: path/to/file ===
 [File content here]
 === END FILE ===
@@ -225,7 +239,7 @@ To delete an obsolete file:
 === END DELETE ===
 
 ERROR LOGS / STATUS CONTEXT:
-{error_logs[-1500:]}
+{error_logs}
 """
     
     if not API_KEY:
@@ -241,10 +255,15 @@ ERROR LOGS / STATUS CONTEXT:
     payload = {
         "model": MODEL_NAME,
         "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 4096
+        "max_tokens": 4096,
+        "venice_parameters": {
+            "enable_web_search": "auto",
+            "enable_web_scraping": True,
+            "include_venice_system_prompt": True
+        }
     }
 
-    print(f"\n[*] Sending request to Venice AI Model: {MODEL_NAME}...")
+    print(f"\n[*] Sending request to Venice AI Model: {MODEL_NAME} with ImGui/Touch context...")
 
     try:
         response = requests.post(chat_url, headers=headers, json=payload, timeout=120)
@@ -273,7 +292,7 @@ def apply_ai_patches(ai_response):
     ai_response = re.sub(r"^```[a-zA-Z]*\n", "", ai_response, flags=re.MULTILINE)
 
     commit_match = re.search(r"=== COMMIT:\s*([^\n]+)\s*===", ai_response)
-    commit_message = commit_match.group(1).strip() if commit_match else "fix: convert to pure zygisk, remove java, add debug and package targeting"
+    commit_message = commit_match.group(1).strip() if commit_match else "fix: resolve build and compilation errors"
 
     pattern_file = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)(?==== FILE:|=== DELETE:|\Z)"
     matches_file = re.findall(pattern_file, ai_response, re.DOTALL)
@@ -361,7 +380,7 @@ def master_loop():
                 else:
                     print(f"[*] Build is {status}... waiting for it to finish...")
 
-            url = f"[https://api.github.com/repos/](https://api.github.com/repos/){REPO_OWNER}/{REPO_NAME}/actions/runs/{run_id}"
+            url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/runs/{run_id}"
 
             try:
                 run_details = requests.get(url, headers=HEADERS_GH, timeout=15).json()
@@ -389,9 +408,9 @@ def master_loop():
 
                 logs = get_workflow_logs(run_id)
                 if "Log fetch error" in logs:
-                    logs = "Build artifact was empty/invalid (~746 bytes). Gradle failed to package libzygisk.so into the zip structure."
+                    logs = "Build artifact was empty/invalid. Gradle/CMake failed to build or package binaries."
 
-                print("[*] Analyzing module build/packaging errors with Venice AI...")
+                print("[*] Analyzing clean error logs with Venice AI...")
                 ai_fix = ask_venice_api(logs)
 
                 print("[*] Automatically applying AI patches to local files...")
