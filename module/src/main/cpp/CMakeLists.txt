@@ -1,34 +1,59 @@
-cmake_minimum_required(VERSION 3.18.1)
+cmake_minimum_required(VERSION 3.22.1)
 
-project("RevenyImGui")
+project(RevenyImGui)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(ANDROID_STL c++_shared)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
-    src/main/cpp/native-lib.cpp
-    src/main/cpp/imgui/imgui.cpp
-    src/main/cpp/imgui/imgui_draw.cpp
-    src/main/cpp/imgui/imgui_tables.cpp
-    src/main/cpp/imgui/imgui_widgets.cpp
-    src/main/cpp/imgui/imgui_backend.cpp
-    src/main/cpp/hooks/HookEngine.cpp
-    src/main/cpp/hooks/TouchHook.cpp
-    src/main/cpp/hooks/GraphicsHook.cpp
+# Zygisk headers
+set(ZYGISK_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../../../../../include)
+
+# ImGui sources
+set(IMGUI_SOURCES
+    src/imgui/imgui.cpp
+    src/imgui/imgui_draw.cpp
+    src/imgui/imgui_tables.cpp
+    src/imgui/imgui_widgets.cpp
+    src/imgui/imgui_demo.cpp
+    src/imgui/imgui_backend.cpp
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/src/main/cpp/imgui
+# Hook sources
+set(HOOK_SOURCES
+    src/HookEngine.cpp
+    src/TouchHook.cpp
+    src/GraphicsHook.cpp
+    src/ImGuiRenderer.cpp
 )
 
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    android
+# Main library
+add_library(RevenyImGui SHARED
+    ${IMGUI_SOURCES}
+    ${HOOK_SOURCES}
+    src/main.cpp
+)
+
+target_include_directories(RevenyImGui PRIVATE
+    ${CMAKE_SOURCE_DIR}/src
+    ${ZYGISK_INCLUDE_DIR}
+    ${CMAKE_SOURCE_DIR}/src/imgui
+)
+
+target_link_libraries(RevenyImGui
     log
+    android
     EGL
     GLESv3
 )
+
+target_compile_options(RevenyImGui PRIVATE
+    -fvisibility=hidden
+    -fvisibility-inlines-hidden
+    -Wno-unused-parameter
+    -Wno-unused-function
+)
+
 === END FILE ===

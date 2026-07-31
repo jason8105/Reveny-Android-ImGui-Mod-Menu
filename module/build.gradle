@@ -3,26 +3,15 @@ plugins {
 }
 
 android {
-    namespace 'com.reveny.main'
+    namespace 'com.reveny.modmenu'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.reveny.main"
+        applicationId "com.reveny.modmenu"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
-        externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++17 -frtti -fexceptions"
-                arguments "-DANDROID_STL=c++_shared"
-            }
-        }
-
-        ndk {
-            abiFilters 'arm64-v8a'
-        }
     }
 
     buildTypes {
@@ -34,14 +23,16 @@ android {
 
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
-            version "3.22.1"
+            arguments "-DANDROID_STL=c++_shared"
         }
     }
+
+    ndkVersion '25.2.9519653'
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
 }
+
 === END FILE ===
