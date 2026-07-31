@@ -1,8 +1,27 @@
+# Gradle
 .gradle/
 build/
-*.apk
-*.aab
-*.iml
+*/build/
+
+# IDE
 .idea/
+*.iml
+*.ipr
+*.iws
+
+# Android Studio
+captures/
+.externalNativeBuild/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local configuration
 local.properties
+
+# Generated files
+bin/
+gen/
+out/
 === END FILE ===

@@ -1,18 +1,13 @@
 #pragma once
 
-#include <dlfcn.h>
 #include <string>
 #include <vector>
 
-class HookEngine {
-public:
-    static void init();
-    static void hookEGLSwapBuffers();
-    static void hookVulkanSwapchain();
-    static void hookAInputQueue_getEvent();
-    
-private:
-    static void* getModuleHandle(const char* moduleName);
-    static void* findSymbol(void* handle, const char* symbol);
-};
+namespace HookEngine {
+
+void init();
+void hookAllModules(const std::string& packageName);
+void hookModule(const std::string& packageName, const std::string& className);
+
+} // namespace HookEngine
 === END FILE ===

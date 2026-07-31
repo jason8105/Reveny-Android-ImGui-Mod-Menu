@@ -1,13 +1,11 @@
 #pragma once
 
-class TouchHook {
-public:
-    static void init();
-    static void injectTouch(int x, int y, int action);
-    static bool isMenuOpen();
-    
-private:
-    static bool menuOpen;
-    static void* originalAInputQueue_getEvent;
-};
+namespace TouchHook {
+
+void hook();
+void unhook();
+bool isMenuOpen();
+void setMenuOpen(bool open);
+
+} // namespace TouchHook
 === END FILE ===

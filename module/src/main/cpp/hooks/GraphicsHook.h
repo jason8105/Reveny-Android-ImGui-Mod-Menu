@@ -1,8 +1,10 @@
 #pragma once
 
-class GraphicsHook {
-public:
-    static void Initialize();
-    static void HookEglSwapBuffers();
-};
+namespace GraphicsHook {
+
+void hook();
+void unhook();
+void renderImGui();
+
+} // namespace GraphicsHook
 === END FILE ===
