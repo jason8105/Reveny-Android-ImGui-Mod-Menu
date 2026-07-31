@@ -1,36 +1,28 @@
 #include "imgui.h"
 #include "imgui_impl_android.h"
 #include "imgui_impl_opengl3.h"
-#include <android/native_window.h>
-#include <android/native_window_jni.h>
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
-#include <sys/system_properties.h>
 #include <android/log.h>
 
-#define LOG_TAG "ImGuiBackend"
+#define LOG_TAG "RevenyImGui"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-static EGLDisplay g_eglDisplay = EGL_NO_DISPLAY;
-static EGLSurface g_eglSurface = EGL_NO_SURFACE;
-static EGLContext g_eglContext = EGL_NO_CONTEXT;
-static ANativeWindow* g_nativeWindow = nullptr;
+static EGLDisplay g_display = EGL_NO_DISPLAY;
+static EGLSurface g_surface = EGL_NO_SURFACE;
+static EGLContext g_context = EGL_NO_CONTEXT;
 
-bool ImGuiBackend_Init(ANativeWindow* window) {
-    g_nativeWindow = window;
+void ImGuiBackend_Init() {
+    LOGD("ImGuiBackend initialized");
     
-    g_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-    if (g_eglDisplay == EGL_NO_DISPLAY) {
-        LOGE("eglGetDisplay failed");
-        return false;
+    g_display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    if (g_display == EGL_NO_DISPLAY) {
+        LOGD("eglGetDisplay failed");
+        return;
     }
     
     EGLint major, minor;
-    if (!eglInitialize(g_eglDisplay, &major, &minor)) {
-        LOGE("eglInitialize failed");
-        return false;
-    }
+    eglInitialize(g_display, &major, &minor);
     
     EGLint configAttribs[] = {
         EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
@@ -43,66 +35,42 @@ bool ImGuiBackend_Init(ANativeWindow* window) {
     
     EGLConfig config;
     EGLint numConfigs;
-    if (!eglChooseConfig(g_eglDisplay, configAttribs, &config, 1, &numConfigs)) {
-        LOGE("eglChooseConfig failed");
-        return false;
-    }
+    eglChooseConfig(g_display, configAttribs, &config, 1, &numConfigs);
     
-    g_eglSurface = eglCreateWindowSurface(g_eglDisplay, config, g_nativeWindow, nullptr);
-    if (g_eglSurface == EGL_NO_SURFACE) {
-        LOGE("eglCreateWindowSurface failed");
-        return false;
-    }
+    g_surface = eglCreateWindowSurface(g_display, config, nullptr, nullptr);
+    g_context = eglCreateContext(g_display, config, nullptr, nullptr);
     
-    EGLint contextAttribs[] = {
-        EGL_CONTEXT_CLIENT_VERSION, 3,
-        EGL_NONE
-    };
+    eglMakeCurrent(g_display, g_surface, g_surface, g_context);
     
-    g_eglContext = eglCreateContext(g_eglDisplay, config, EGL_NO_CONTEXT, contextAttribs);
-    if (g_eglContext == EGL_NO_CONTEXT) {
-        LOGE("eglCreateContext failed");
-        return false;
-    }
-    
-    if (!eglMakeCurrent(g_eglDisplay, g_eglSurface, g_eglSurface, g_eglContext)) {
-        LOGE("eglMakeCurrent failed");
-        return false;
-    }
-    
-    ImGui_ImplAndroid_Init(window);
+    ImGui_ImplAndroid_Init(nullptr);
     ImGui_ImplOpenGL3_Init("#version 300 es");
+}
+
+void ImGuiBackend_Render() {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplAndroid_NewFrame();
+    ImGui::NewFrame();
     
-    LOGD("ImGui backend initialized");
-    return true;
+    ImGui::ShowDemoWindow();
+    
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    
+    eglSwapBuffers(g_display, g_surface);
 }
 
 void ImGuiBackend_Shutdown() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplAndroid_Shutdown();
     
-    if (g_eglContext != EGL_NO_CONTEXT) {
-        eglDestroyContext(g_eglDisplay, g_eglContext);
-        g_eglContext = EGL_NO_CONTEXT;
+    if (g_context != EGL_NO_CONTEXT) {
+        eglDestroyContext(g_display, g_context);
     }
-    
-    if (g_eglSurface != EGL_NO_SURFACE) {
-        eglDestroySurface(g_eglDisplay, g_eglSurface);
-        g_eglSurface = EGL_NO_SURFACE;
+    if (g_surface != EGL_NO_SURFACE) {
+        eglDestroySurface(g_display, g_surface);
     }
-    
-    if (g_eglDisplay != EGL_NO_DISPLAY) {
-        eglTerminate(g_eglDisplay);
-        g_eglDisplay = EGL_NO_DISPLAY;
+    if (g_display != EGL_NO_DISPLAY) {
+        eglTerminate(g_display);
     }
-    
-    g_nativeWindow = nullptr;
-    LOGD("ImGui backend shutdown");
-}
-
-void ImGuiBackend_Render() {
-    if (g_eglDisplay == EGL_NO_DISPLAY) return;
-    
-    eglSwapBuffers(g_eglDisplay, g_eglSurface);
 }
 === END FILE ===

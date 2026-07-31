@@ -2,7 +2,12 @@
 
 class TouchHook {
 public:
-    static void Initialize();
-    static void HookInputQueue();
+    static void init();
+    static void injectTouch(int x, int y, int action);
+    static bool isMenuOpen();
+    
+private:
+    static bool menuOpen;
+    static void* originalAInputQueue_getEvent;
 };
 === END FILE ===
