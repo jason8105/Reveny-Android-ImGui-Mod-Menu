@@ -4,26 +4,24 @@ project("RevenyModMenu")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(RevenyModMenu SHARED
+add_library(${CMAKE_PROJECT_NAME} SHARED
     src/main/cpp/main.cpp
     src/main/cpp/HookEngine.cpp
     src/main/cpp/TouchHook.cpp
     src/main/cpp/ImGuiHook.cpp
 )
 
-target_include_directories(RevenyModMenu PRIVATE
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/../..
+    ${CMAKE_SOURCE_DIR}/../jni
 )
 
 find_library(log-lib log)
 
-target_link_libraries(RevenyModMenu
+target_link_libraries(${CMAKE_PROJECT_NAME}
     ${log-lib}
-    android
-    EGL
-    GLESv3
+    z
+    m
 )
 === END FILE ===

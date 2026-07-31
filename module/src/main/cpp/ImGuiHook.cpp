@@ -1,24 +1,25 @@
 #include "ImGuiHook.h"
-#include <EGL/egl.h>
-#include <GLES3/gl3.h>
-#include <android/log.h>
-#include <thread>
-#include <chrono>
-
-#define LOG_TAG "ImGuiHook"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#include <imgui.h>
+#include <imgui_impl_android.h>
+#include <imgui_impl_opengl3.h>
 
 namespace ImGuiHook {
-    void Init() {
-        LOGD("ImGui hook initialized");
-    }
+
+void Init() {
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+}
+
+void Render() {
+    ImGui::SetNextWindowPos(ImVec2(100, 100));
+    ImGui::SetNextWindowSize(ImVec2(300, 400));
     
-    void Render() {
-        LOGD("Rendering ImGui");
-    }
-    
-    void SwapBuffers() {
-        LOGD("Swapping buffers");
-    }
+    ImGui::Begin("Mod Menu");
+    ImGui::Text("Reveny Mod Menu");
+    ImGui::End();
+}
+
 }
 === END FILE ===
