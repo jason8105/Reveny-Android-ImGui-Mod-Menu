@@ -1,20 +1,18 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <functional>
+#include <jni.h>
 
 class HookEngine {
 public:
     static void Initialize();
-    static void Cleanup();
+    static void Shutdown();
+    static void SetJavaVM(JavaVM* vm);
+    static JavaVM* GetJavaVM();
     static void PltHookAllModules();
-    static void HookFunction(const char* moduleName, const char* functionName, void* replacement);
-    static void* GetSymbol(const char* moduleName, const char* symbolName);
-    static bool IsModuleLoaded(const char* moduleName);
-    
+
 private:
-    static std::vector<std::string> g_loadedModules;
+    static JavaVM* g_javaVM;
     static bool g_initialized;
 };
+
 === END FILE ===

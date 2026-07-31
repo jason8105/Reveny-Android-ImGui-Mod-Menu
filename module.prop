@@ -1,8 +1,10 @@
-id=zygisk-imgui-touch-fix
-name=Zygisk ImGui Touch Fix
+id=ImGuiTouchHook
+name=ImGui Touch Hook
 version=1.0.0
 versionCode=1
-author=Elite Build Engineer
-description=Native ImGui overlay with touch interception for Android games
-minSdk=24
+author=Qwen 3.5 35B A3B
+description=Zygisk ImGui overlay with touch interception for game mod menus
+minSdk=26
+zipMd5=
+
 === END FILE ===
