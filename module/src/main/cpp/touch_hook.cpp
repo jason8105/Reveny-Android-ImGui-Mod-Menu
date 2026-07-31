@@ -1,25 +1,32 @@
-#include "touch_hook.h"
-#include "imgui_impl.h"
+#include <jni.h>
+#include <string>
+#include <vector>
+#include <dlfcn.h>
+#include <unistd.h>
+#include <sys/system_properties.h>
+#include <android/log.h>
 
-bool TouchHook::g_menu_open = false;
-void* TouchHook::g_original_input_queue = nullptr;
+#define LOG_TAG "RevenyTouch"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-void TouchHook::init() {
-    g_menu_open = false;
-    g_original_input_queue = nullptr;
+namespace TouchHook {
+
+void Init() {
+    LOGD("TouchHook initialized");
 }
 
-void TouchHook::deinit() {
-    g_menu_open = false;
-    g_original_input_queue = nullptr;
+bool IsMenuOpen() {
+    return false;
 }
 
-void TouchHook::injectTouch(int x, int y, int action) {
-    // Inject touch event for ImGui menu interaction
-    ImGuiImpl::handleTouch(x, y, action);
 }
 
-bool TouchHook::isMenuOpen() {
-    return g_menu_open;
+extern "C" {
+
+void touch_hook_init() {
+    TouchHook::Init();
+    LOGD("Touch hook initialized");
+}
+
 }
 === END FILE ===
