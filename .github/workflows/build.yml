@@ -1,38 +1,43 @@
-name: Build Zygisk Module
+name: Build Zygisk Module Debug
+
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-
-      - name: Setup NDK (via sdkmanager)
-        run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;25.2.8569804"
-          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.2.8569804" >> $GITHUB_ENV
-          echo "$ANDROID_HOME/ndk/25.2.8569804" >> $GITHUB_PATH
-
-      - name: Setup JDK
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
-      - name: Build module zip
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.18.1'
+
+      - name: Build Zygisk Module
         run: |
-          chmod +x gradlew
-          ./gradlew clean assembleRelease
+          chmod +x ./gradlew
+          ./gradlew :module:assembleDebug
 
-      - name: Upload artifact
+      - name: Package Magisk Zip
+        run: |
+          mkdir -p final_package
+          # Yahan apni module zip file ya folder ko zip bana lena
+          cd module/build/outputs/ || true
+          # Tu apne hisab se yahan zip command ya path adjust kar lena
+          
+      - name: Upload Zygisk Module Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: zygisk-module
-          path: build/outputs/module/*.zip
+          name: Zygisk-Module-Debug-Installable
+          path: final_package/*.zip
