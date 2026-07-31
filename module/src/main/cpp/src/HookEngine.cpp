@@ -6,42 +6,65 @@
 
 namespace HookEngine {
 
-std::vector<void*> g_plt_handles;
-
-void PltHookAllModules() {
-    Dl_info info;
-    void* handle = dlopen(nullptr, RTLD_NOW);
-    if (handle) {
-        g_plt_handles.push_back(handle);
+void* dlsym_safe(const char* symbol) {
+    void* handle = dlopen("libandroid_runtime.so", RTLD_NOW);
+    if (!handle) {
+        handle = dlopen("libart.so", RTLD_NOW);
     }
+    if (!handle) {
+        handle = dlopen("libart-compiler.so", RTLD_NOW);
+    }
+    if (!handle) {
+        handle = dlopen("libart.so", RTLD_NOW);
+    }
+    if (!handle) {
+        return nullptr;
+    }
+    void* sym = dlsym(handle, symbol);
+    dlclose(handle);
+    return sym;
 }
 
-bool HookFunction(const char* symbol, void* replacement, void** original) {
-    void* handle = dlopen(nullptr, RTLD_NOW);
-    if (!handle) return false;
-
-    *original = dlsym(handle, symbol);
-    if (!*original) {
-        dlclose(handle);
+bool HookEngine::PltHookAllModules(const char* symbol, void* replacement, void** original) {
+    Dl_info info;
+    if (dladdr(replacement, &info) == 0) {
         return false;
     }
-
-    // Simple hook implementation - replace with proper hooking mechanism
-    // This is a placeholder for actual hooking logic
-    return true;
+    
+    std::vector<std::string> modules;
+    FILE* fp = fopen("/proc/self/maps", "r");
+    if (!fp) return false;
+    
+    char line[512];
+    while (fgets(line, sizeof(line), fp)) {
+        if (strstr(line, ".so")) {
+            char* start = strchr(line, '/');
+            if (start) {
+                char* end = strchr(start, ' ');
+                if (end) {
+                    *end = '\0';
+                    modules.push_back(start);
+                }
+            }
+        }
+    }
+    fclose(fp);
+    
+    for (const auto& module : modules) {
+        void* handle = dlopen(module.c_str(), RTLD_NOW);
+        if (!handle) continue;
+        
+        void* sym = dlsym(handle, symbol);
+        if (sym) {
+            *original = sym;
+            dlclose(handle);
+            return true;
+        }
+        dlclose(handle);
+    }
+    
+    return false;
 }
 
-void InitImGuiContext() {
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 }
-
-void ShutdownImGuiContext() {
-    ImGui::DestroyContext();
-}
-
-} // namespace HookEngine
-
 === END FILE ===

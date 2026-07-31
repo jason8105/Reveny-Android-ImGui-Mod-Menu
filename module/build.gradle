@@ -1,31 +1,23 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'com.reveny.modmenu'
+    namespace 'com.reveny.mod'
     compileSdk 34
-
+    
     defaultConfig {
-        applicationId "com.reveny.modmenu"
+        applicationId "com.reveny.mod"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
-
-        externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++17 -frtti -fexceptions"
-                arguments "-DANDROID_STL=c++_shared"
-            }
-        }
-
+        
         ndk {
             abiFilters 'arm64-v8a'
         }
     }
-
+    
     buildTypes {
         release {
             minifyEnabled false
@@ -35,23 +27,21 @@ android {
             minifyEnabled false
         }
     }
-
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
             version "3.22.1"
         }
     }
-
-    buildFeatures {
-        viewBinding true
-    }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 === END FILE ===

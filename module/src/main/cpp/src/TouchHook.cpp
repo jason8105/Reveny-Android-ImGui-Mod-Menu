@@ -1,52 +1,53 @@
 #include "TouchHook.h"
-#include "HookEngine.h"
 #include <android/input.h>
 #include <android/looper.h>
 #include <jni.h>
+#include <cstring>
 
 namespace TouchHook {
 
-static AInputQueue* g_inputQueue = nullptr;
-static bool g_menuVisible = false;
+static bool touchHookEnabled = false;
+static bool menuVisible = false;
 
-void InitTouchHook(AInputQueue* queue) {
-    g_inputQueue = queue;
+void EnableTouchHook(bool enable) {
+    touchHookHookEnabled = enable;
 }
 
-bool IsMenuVisible() {
-    return g_menuVisible;
+bool IsTouchHookEnabled() {
+    return touchHookEnabled;
 }
 
 void SetMenuVisible(bool visible) {
-    g_menuVisible = visible;
+    menuVisible = visible;
 }
 
-int32_t HandleTouchEvent(AInputEvent* event) {
-    if (!g_inputQueue || AInputEvent_getType(event) != AINPUT_EVENT_TYPE_MOTION) {
-        return 0;
-    }
+bool IsMenuVisible() {
+    return menuVisible;
+}
 
-    if (g_menuVisible) {
-        // Pass touch events to ImGui
-        ImGuiIO& io = ImGui::GetIO();
-        io.AddMouseSourceEvent(AInputEvent_getSource(event) == AINPUT_SOURCE_TOUCH ?
-            ImGuiMouseSource_Mouse : ImGuiMouseSource_Touch);
-        
-        float x = AMotionEvent_getX(event, 0);
-        float y = AMotionEvent_getY(event, 0);
-        io.AddMousePosEvent(x, y);
-        
-        int action = AMotionEvent_getAction(event);
-        int button = action & AMOTION_EVENT_ACTION_MASK;
-        io.AddMouseButtonEvent(0, button == AMOTION_EVENT_ACTION_DOWN || 
-            button == AMOTION_EVENT_ACTION_MOVE);
-        
-        return 1;
+int32_t HookAInputQueue_getEvent(AInputQueue* queue, AInputEvent* event) {
+    if (touchHookEnabled && menuVisible && event) {
+        AInputEvent_type type = AInputEvent_getType(event);
+        if (type == AINPUT_EVENT_TYPE_MOTION) {
+            int32_t action = AMotionEvent_getAction(event);
+            int32_t actionCode = action & AMOTION_EVENT_ACTION_MASK;
+            
+            if (actionCode == AMOTION_EVENT_ACTION_DOWN || 
+                actionCode == AMOTION_EVENT_ACTION_UP ||
+                actionCode == AMOTION_EVENT_ACTION_MOVE) {
+                float x = AMotionEvent_getX(event, 0);
+                float y = AMotionEvent_getY(event, 0);
+                
+                ImGuiIO& io = ImGui::GetIO();
+                io.AddMouseSourceEvent(ImGuiMouseSource_Mouse);
+                io.AddMousePosEvent(x, y);
+                io.AddMouseButtonEvent(0, actionCode == AMOTION_EVENT_ACTION_DOWN);
+            }
+        }
     }
-
+    
     return 0;
 }
 
-} // namespace TouchHook
-
+}
 === END FILE ===
