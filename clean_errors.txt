@@ -1,267 +1,267 @@
 
 === Job: build ===
-ï»¿2026-07-31T12:36:09.4988248Z Current runner version: '2.336.0'
-2026-07-31T12:36:09.5012585Z ##[group]Runner Image Provisioner
-2026-07-31T12:36:09.5013522Z Hosted Compute Agent
-2026-07-31T12:36:09.5014158Z Version: 20260707.563
-2026-07-31T12:36:09.5014792Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
-2026-07-31T12:36:09.5015504Z Build Date: 2026-07-07T19:33:50Z
-2026-07-31T12:36:09.5016432Z Worker ID: {0a318692-ea77-42c6-82d0-760d386cfd31}
-2026-07-31T12:36:09.5017185Z Azure Region: eastus
-2026-07-31T12:36:09.5017732Z ##[endgroup]
-2026-07-31T12:36:09.5019250Z ##[group]Operating System
-2026-07-31T12:36:09.5019917Z Ubuntu
-2026-07-31T12:36:09.5020486Z 24.04.4
-2026-07-31T12:36:09.5021052Z LTS
-2026-07-31T12:36:09.5021554Z ##[endgroup]
-2026-07-31T12:36:09.5022139Z ##[group]Runner Image
-2026-07-31T12:36:09.5022723Z Image: ubuntu-24.04
-2026-07-31T12:36:09.5023262Z Version: 20260720.247.2
-2026-07-31T12:36:09.5024597Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
-2026-07-31T12:36:09.5026385Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
-2026-07-31T12:36:09.5027364Z ##[endgroup]
-2026-07-31T12:36:09.5028532Z ##[group]GITHUB_TOKEN Permissions
-2026-07-31T12:36:09.5030442Z Contents: read
-2026-07-31T12:36:09.5031042Z Metadata: read
-2026-07-31T12:36:09.5032128Z Packages: read
-2026-07-31T12:36:09.5032650Z ##[endgroup]
-2026-07-31T12:36:09.5034801Z Secret source: Actions
-2026-07-31T12:36:09.5035900Z Prepare workflow directory
-2026-07-31T12:36:09.5361078Z Prepare all required actions
-2026-07-31T12:36:09.5408837Z Getting action download info
-2026-07-31T12:36:09.8088291Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
-2026-07-31T12:36:10.0667396Z Download action repository 'actions/setup-java@v4' (SHA:c1e323688fd81a25caa38c78aa6df2d33d3e20d9)
-2026-07-31T12:36:10.2741382Z Download action repository 'lukka/get-cmake@latest' (SHA:4a7d025fc60f00db0c7b44ebf783d19b52444830)
-2026-07-31T12:36:10.4204734Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
-2026-07-31T12:36:10.6339976Z Complete job name: build
-2026-07-31T12:36:10.7151567Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-2026-07-31T12:36:10.7161042Z ##[group]Run actions/checkout@v4
-2026-07-31T12:36:10.7162106Z with:
-2026-07-31T12:36:10.7162681Z   submodules: recursive
-2026-07-31T12:36:10.7163365Z   repository: jason8105/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:10.7168116Z   token: ***
-2026-07-31T12:36:10.7168696Z   ssh-strict: true
-2026-07-31T12:36:10.7169314Z   ssh-user: git
-2026-07-31T12:36:10.7169895Z   persist-credentials: true
-2026-07-31T12:36:10.7170477Z   clean: true
-2026-07-31T12:36:10.7171196Z   sparse-checkout-cone-mode: true
-2026-07-31T12:36:10.7171877Z   fetch-depth: 1
-2026-07-31T12:36:10.7172477Z   fetch-tags: false
-2026-07-31T12:36:10.7173127Z   show-progress: true
-2026-07-31T12:36:10.7173681Z   lfs: false
-2026-07-31T12:36:10.7174366Z   set-safe-directory: true
-2026-07-31T12:36:10.7175012Z   allow-unsafe-pr-checkout: false
-2026-07-31T12:36:10.7176354Z ##[endgroup]
-2026-07-31T12:36:10.8226817Z Syncing repository: jason8105/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:10.8229221Z ##[group]Getting Git version info
-2026-07-31T12:36:10.8230461Z Working directory is '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu'
-2026-07-31T12:36:10.8232181Z [command]/usr/bin/git version
-2026-07-31T12:36:10.8336932Z git version 2.54.0
-2026-07-31T12:36:10.8360869Z ##[endgroup]
-2026-07-31T12:36:10.8378286Z Temporarily overriding HOME='/home/runner/work/_temp/d9db942f-abea-4089-b8e0-6de2dafd7b24' before making global git config changes
-2026-07-31T12:36:10.8381525Z Adding repository directory to the temporary git global config as a safe directory
-2026-07-31T12:36:10.8385045Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:10.8442821Z Deleting the contents of '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu'
-2026-07-31T12:36:10.8446662Z ##[group]Initializing the repository
-2026-07-31T12:36:10.8452361Z [command]/usr/bin/git init /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:10.8575780Z hint: Using 'master' as the name for the initial branch. This default branch name
-2026-07-31T12:36:10.8578087Z hint: will change to "main" in Git 3.0. To configure the initial branch name
-2026-07-31T12:36:10.8579374Z hint: to use in all of your new repositories, which will suppress this warning,
-2026-07-31T12:36:10.8580289Z hint: call:
-2026-07-31T12:36:10.8580866Z hint:
-2026-07-31T12:36:10.8581560Z hint: 	git config --global init.defaultBranch <name>
-2026-07-31T12:36:10.8582412Z hint:
-2026-07-31T12:36:10.8583206Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
-2026-07-31T12:36:10.8584342Z hint: 'development'. The just-created branch can be renamed via this command:
-2026-07-31T12:36:10.8585246Z hint:
-2026-07-31T12:36:10.8585874Z hint: 	git branch -m <name>
-2026-07-31T12:36:10.8587098Z hint:
-2026-07-31T12:36:10.8588100Z hint: Disable this message with "git config set advice.defaultBranchName false"
-2026-07-31T12:36:10.8594152Z Initialized empty Git repository in /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/.git/
-2026-07-31T12:36:10.8606838Z [command]/usr/bin/git remote add origin https://github.com/jason8105/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:10.8653866Z ##[endgroup]
-2026-07-31T12:36:10.8655599Z ##[group]Disabling automatic garbage collection
-2026-07-31T12:36:10.8658848Z [command]/usr/bin/git config --local gc.auto 0
-2026-07-31T12:36:10.8698919Z ##[endgroup]
-2026-07-31T12:36:10.8700507Z ##[group]Setting up auth
-2026-07-31T12:36:10.8719150Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2026-07-31T12:36:10.8759013Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2026-07-31T12:36:10.9180101Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2026-07-31T12:36:10.9218787Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2026-07-31T12:36:10.9439902Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-2026-07-31T12:36:10.9477207Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-2026-07-31T12:36:10.9698640Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
-2026-07-31T12:36:10.9736316Z ##[endgroup]
-2026-07-31T12:36:10.9738485Z ##[group]Fetching the repository
-2026-07-31T12:36:10.9748121Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +f84b39a550ead551f7cdf02129bc6ff3be388262:refs/remotes/origin/main
-2026-07-31T12:36:11.3464766Z From https://github.com/jason8105/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:11.3466845Z  * [new ref]         f84b39a550ead551f7cdf02129bc6ff3be388262 -> origin/main
-2026-07-31T12:36:11.3499816Z ##[endgroup]
-2026-07-31T12:36:11.3501835Z ##[group]Determining the checkout info
-2026-07-31T12:36:11.3508205Z ##[endgroup]
-2026-07-31T12:36:11.3509307Z [command]/usr/bin/git sparse-checkout disable
-2026-07-31T12:36:11.3559501Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
-2026-07-31T12:36:11.3590528Z ##[group]Checking out the ref
-2026-07-31T12:36:11.3596382Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
-2026-07-31T12:36:11.4085097Z Switched to a new branch 'main'
-2026-07-31T12:36:11.4087605Z branch 'main' set up to track 'origin/main'.
-2026-07-31T12:36:11.4097319Z ##[endgroup]
-2026-07-31T12:36:11.4098961Z ##[group]Setting up auth for fetching submodules
-2026-07-31T12:36:11.4101792Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
-2026-07-31T12:36:11.4141483Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
-2026-07-31T12:36:11.4171911Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
-2026-07-31T12:36:11.4204939Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-209580241@github.com:
-2026-07-31T12:36:11.4237219Z ##[endgroup]
-2026-07-31T12:36:11.4240101Z ##[group]Fetching submodules
-2026-07-31T12:36:11.4242193Z [command]/usr/bin/git submodule sync --recursive
-2026-07-31T12:36:11.4461962Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
-2026-07-31T12:36:11.4720247Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
-2026-07-31T12:36:11.4991437Z ##[endgroup]
-2026-07-31T12:36:11.4993302Z ##[group]Persisting credentials for submodules
-2026-07-31T12:36:11.5020354Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
-2026-07-31T12:36:11.5167612Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
-2026-07-31T12:36:11.5417668Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
-2026-07-31T12:36:11.5675433Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-209580241@github.com:'
-2026-07-31T12:36:11.5919432Z ##[endgroup]
-2026-07-31T12:36:11.5994758Z f84b39a550ead551f7cdf02129bc6ff3be388262
-2026-07-31T12:36:11.6398584Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-2026-07-31T12:36:11.6404128Z ##[group]Run actions/setup-java@v4
-2026-07-31T12:36:11.6405159Z with:
-2026-07-31T12:36:11.6405907Z   distribution: temurin
-2026-07-31T12:36:11.6406984Z   java-version: 17
-2026-07-31T12:36:11.6407802Z   cache: gradle
-2026-07-31T12:36:11.6408602Z   java-package: jdk
-2026-07-31T12:36:11.6409443Z   check-latest: false
-2026-07-31T12:36:11.6410316Z   server-id: github
-2026-07-31T12:36:11.6411175Z   server-username: GITHUB_ACTOR
-2026-07-31T12:36:11.6412194Z   server-password: GITHUB_TOKEN
-2026-07-31T12:36:11.6413216Z   overwrite-settings: true
-2026-07-31T12:36:11.6414142Z   job-status: success
-2026-07-31T12:36:11.6424323Z   token: ***
-2026-07-31T12:36:11.6425131Z ##[endgroup]
-2026-07-31T12:36:11.8047496Z ##[group]Installed distributions
-2026-07-31T12:36:11.8112029Z Resolved Java 17.0.19+10 from tool-cache
-2026-07-31T12:36:11.8113458Z Setting Java 17.0.19+10 as the default
-2026-07-31T12:36:11.8123008Z (node:2448) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-2026-07-31T12:36:11.8125977Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-07-31T12:36:11.8129047Z Creating toolchains.xml for JDK version 17 from temurin
-2026-07-31T12:36:11.8201800Z Writing to /home/runner/.m2/toolchains.xml
-2026-07-31T12:36:11.8203147Z 
-2026-07-31T12:36:11.8204024Z Java configuration:
-2026-07-31T12:36:11.8205421Z   Distribution: temurin
-2026-07-31T12:36:11.8207233Z   Version: 17.0.19+10
-2026-07-31T12:36:11.8209185Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:11.8210651Z 
-2026-07-31T12:36:11.8211781Z ##[endgroup]
-2026-07-31T12:36:11.8228560Z Creating settings.xml with server-id: github
-2026-07-31T12:36:11.8230902Z Writing to /home/runner/.m2/settings.xml
-2026-07-31T12:36:11.9572906Z gradle cache is not found
-2026-07-31T12:36:11.9828036Z ##[group]Run lukka/get-cmake@latest
-2026-07-31T12:36:11.9829227Z with:
-2026-07-31T12:36:11.9830097Z   cmakeVersion: 3.28.0
-2026-07-31T12:36:11.9831097Z   useCloudCache: true
-2026-07-31T12:36:11.9832081Z   useLocalCache: false
-2026-07-31T12:36:11.9833034Z env:
-2026-07-31T12:36:11.9834294Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:11.9836697Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:11.9838412Z ##[endgroup]
-2026-07-31T12:36:12.1250397Z useCloudCache:true
-2026-07-31T12:36:12.1251876Z useLocalCache:false
-2026-07-31T12:36:12.1253523Z user defined cmake version:3.28.0
-2026-07-31T12:36:12.1255301Z user defined ninja version:
-2026-07-31T12:36:12.1257129Z cmake version:3.28.0
-2026-07-31T12:36:12.1258603Z ninja version:latest
-2026-07-31T12:36:12.1264098Z ##[group]Computing cache key from the downloads' URLs
-2026-07-31T12:36:12.1266360Z Cache key: '944094833'.
-2026-07-31T12:36:12.1268986Z Local install root: '/home/runner/work/_temp/944094833''.
-2026-07-31T12:36:12.1270969Z ##[endgroup]
-2026-07-31T12:36:12.1273199Z ##[group]Restoring from GitHub cloud cache using key '944094833' into '/home/runner/work/_temp/944094833'
-2026-07-31T12:36:12.1971792Z Cache hit for: 944094833
-2026-07-31T12:36:12.5924988Z Received 52270593 of 52270593 (100.0%), 151.1 MBs/sec
-2026-07-31T12:36:12.5927420Z Cache Size: ~50 MB (52270593 B)
-2026-07-31T12:36:12.5957460Z [command]/usr/bin/tar -xf /home/runner/work/_temp/d3f15a9d-9eba-4f77-b037-ca002e875634/cache.tzst -P -C /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu --use-compress-program unzstd
-2026-07-31T12:36:13.1171593Z Cache restored successfully
-2026-07-31T12:36:13.1218789Z Cloud cache hit.
-2026-07-31T12:36:13.1223030Z ##[endgroup]
-2026-07-31T12:36:13.1225226Z ##[group]Add CMake and Ninja to PATH
-2026-07-31T12:36:13.1228150Z CMake path: '/home/runner/work/_temp/944094833/cmake-3.28.0-linux-x86_64/bin/'
-2026-07-31T12:36:13.1230966Z Ninja path: '/home/runner/work/_temp/944094833'
-2026-07-31T12:36:13.1236352Z ##[group]Validating the installed CMake and Ninja
-2026-07-31T12:36:13.1267521Z CMake actual path is: '/home/runner/work/_temp/944094833/cmake-3.28.0-linux-x86_64/bin/cmake'
-2026-07-31T12:36:13.1270825Z Ninja actual path is: '/home/runner/work/_temp/944094833/ninja'
-2026-07-31T12:36:13.1273823Z ##[endgroup]
-2026-07-31T12:36:13.1275638Z ##[endgroup]
-2026-07-31T12:36:13.1277189Z get-cmake action execution succeeded
-2026-07-31T12:36:13.1492646Z ##[group]Run chmod +x ./gradlew
-2026-07-31T12:36:13.1493806Z [36;1mchmod +x ./gradlew[0m
-2026-07-31T12:36:13.1545147Z shell: /usr/bin/bash -e {0}
-2026-07-31T12:36:13.1546390Z env:
-2026-07-31T12:36:13.1547589Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:13.1549635Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:13.1551269Z ##[endgroup]
-2026-07-31T12:36:13.2255952Z ##[group]Run ./gradlew :module:assembleDebug
-2026-07-31T12:36:13.2258235Z [36;1m./gradlew :module:assembleDebug[0m
-2026-07-31T12:36:13.2307423Z shell: /usr/bin/bash -e {0}
-2026-07-31T12:36:13.2308417Z env:
-2026-07-31T12:36:13.2309595Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:13.2311506Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
-2026-07-31T12:36:13.2313038Z ##[endgroup]
-2026-07-31T12:36:18.0773639Z ............10%.............20%............30%.............40%.............50%............60%.............70%.............80%............90%.............100%
-2026-07-31T12:36:19.2755953Z 
-2026-07-31T12:36:19.2758166Z Welcome to Gradle 8.5!
-2026-07-31T12:36:19.2758870Z 
-2026-07-31T12:36:19.2772383Z Here are the highlights of this release:
-2026-07-31T12:36:19.2773243Z  - Support for running on Java 21
-2026-07-31T12:36:19.2773822Z  - Faster first use with Kotlin DSL
-2026-07-31T12:36:19.2774428Z  - Improved error and warning messages
-2026-07-31T12:36:19.2774763Z 
-2026-07-31T12:36:19.2775107Z For more details see https://docs.gradle.org/8.5/release-notes.html
-2026-07-31T12:36:19.2775672Z 
-2026-07-31T12:36:19.4772203Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
-2026-07-31T12:36:20.7757804Z Daemon will be stopped at the end of the build 
-2026-07-31T12:36:21.0746112Z Configuration on demand is an incubating feature.
-2026-07-31T12:36:22.9745744Z 
-2026-07-31T12:36:22.9767360Z FAILURE: Build failed with an exception.
-2026-07-31T12:36:22.9768286Z 
-2026-07-31T12:36:22.9768805Z * Where:
-2026-07-31T12:36:22.9775204Z Settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle' line: 19
-2026-07-31T12:36:22.9776676Z 
-2026-07-31T12:36:22.9778158Z * What went wrong:
-2026-07-31T12:36:22.9779554Z Could not compile settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle'.
-2026-07-31T12:36:22.9784307Z > startup failed:
-2026-07-31T12:36:22.9785836Z   settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle': 19: Unexpected input: '===' @ line 19, column 14.
-2026-07-31T12:36:22.9788104Z      === END FILE ===
-2026-07-31T12:36:22.9788743Z                   ^
-2026-07-31T12:36:22.9808247Z   
-2026-07-31T12:36:22.9808958Z   1 error
-2026-07-31T12:36:22.9828328Z 
-2026-07-31T12:36:22.9846869Z 
-2026-07-31T12:36:22.9887251Z * Try:
-2026-07-31T12:36:22.9906620Z > Run with --stacktrace option to get the stack trace.
-2026-07-31T12:36:22.9930690Z > Run with --info or --debug option to get more log output.
-2026-07-31T12:36:22.9933334Z > Run with --scan to get full insights.
-2026-07-31T12:36:22.9942212Z > Get more help at https://help.gradle.org.
-2026-07-31T12:36:22.9947956Z 
-2026-07-31T12:36:22.9948443Z BUILD FAILED in 7s
-2026-07-31T12:36:23.4473905Z ##[error]Process completed with exit code 1.
-2026-07-31T12:36:23.4641886Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-2026-07-31T12:36:23.4643227Z Post job cleanup.
-2026-07-31T12:36:23.5905404Z (node:2576) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
-2026-07-31T12:36:23.5906359Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-07-31T12:36:23.6097881Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-2026-07-31T12:36:23.6099126Z Post job cleanup.
-2026-07-31T12:36:23.6969416Z [command]/usr/bin/git version
-2026-07-31T12:36:23.7041022Z git version 2.54.0
-2026-07-31T12:36:23.7081067Z Temporarily overriding HOME='/home/runner/work/_temp/d707c307-3bf6-4f5c-866c-10fad22fbcad' before making global git config changes
-2026-07-31T12:36:23.7082627Z Adding repository directory to the temporary git global config as a safe directory
-2026-07-31T12:36:23.7087611Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
-2026-07-31T12:36:23.7128670Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-2026-07-31T12:36:23.7167357Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-2026-07-31T12:36:23.7415215Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-2026-07-31T12:36:23.7443916Z http.https://github.com/.extraheader
-2026-07-31T12:36:23.7467570Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
-2026-07-31T12:36:23.7515527Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-2026-07-31T12:36:23.7762056Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-2026-07-31T12:36:23.7803428Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-2026-07-31T12:36:23.8172339Z Cleaning up orphan processes
-2026-07-31T12:36:23.8426351Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+ï»¿2026-07-31T12:37:00.1448830Z Current runner version: '2.336.0'
+2026-07-31T12:37:00.1483000Z ##[group]Runner Image Provisioner
+2026-07-31T12:37:00.1484328Z Hosted Compute Agent
+2026-07-31T12:37:00.1485429Z Version: 20260707.563
+2026-07-31T12:37:00.1486712Z Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+2026-07-31T12:37:00.1488150Z Build Date: 2026-07-07T19:33:50Z
+2026-07-31T12:37:00.1489272Z Worker ID: {f36c0d4d-2e68-4666-8358-23b2773414de}
+2026-07-31T12:37:00.1490386Z Azure Region: eastus
+2026-07-31T12:37:00.1491456Z ##[endgroup]
+2026-07-31T12:37:00.1494066Z ##[group]Operating System
+2026-07-31T12:37:00.1495229Z Ubuntu
+2026-07-31T12:37:00.1496363Z 24.04.4
+2026-07-31T12:37:00.1497166Z LTS
+2026-07-31T12:37:00.1498060Z ##[endgroup]
+2026-07-31T12:37:00.1498970Z ##[group]Runner Image
+2026-07-31T12:37:00.1499973Z Image: ubuntu-24.04
+2026-07-31T12:37:00.1500937Z Version: 20260720.247.2
+2026-07-31T12:37:00.1503481Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+2026-07-31T12:37:00.1506480Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+2026-07-31T12:37:00.1508302Z ##[endgroup]
+2026-07-31T12:37:00.1510280Z ##[group]GITHUB_TOKEN Permissions
+2026-07-31T12:37:00.1513249Z Contents: read
+2026-07-31T12:37:00.1514171Z Metadata: read
+2026-07-31T12:37:00.1515180Z Packages: read
+2026-07-31T12:37:00.1516461Z ##[endgroup]
+2026-07-31T12:37:00.1519445Z Secret source: Actions
+2026-07-31T12:37:00.1521552Z Prepare workflow directory
+2026-07-31T12:37:00.1992948Z Prepare all required actions
+2026-07-31T12:37:00.2064230Z Getting action download info
+2026-07-31T12:37:00.4263466Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-07-31T12:37:00.6521604Z Download action repository 'actions/setup-java@v4' (SHA:c1e323688fd81a25caa38c78aa6df2d33d3e20d9)
+2026-07-31T12:37:00.8849061Z Download action repository 'lukka/get-cmake@latest' (SHA:4a7d025fc60f00db0c7b44ebf783d19b52444830)
+2026-07-31T12:37:01.0391975Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-07-31T12:37:01.2726827Z Complete job name: build
+2026-07-31T12:37:01.3775377Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-31T12:37:01.3787194Z ##[group]Run actions/checkout@v4
+2026-07-31T12:37:01.3788573Z with:
+2026-07-31T12:37:01.3789432Z   submodules: recursive
+2026-07-31T12:37:01.3790655Z   repository: jason8105/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.3799361Z   token: ***
+2026-07-31T12:37:01.3800241Z   ssh-strict: true
+2026-07-31T12:37:01.3801245Z   ssh-user: git
+2026-07-31T12:37:01.3802143Z   persist-credentials: true
+2026-07-31T12:37:01.3803221Z   clean: true
+2026-07-31T12:37:01.3804155Z   sparse-checkout-cone-mode: true
+2026-07-31T12:37:01.3805263Z   fetch-depth: 1
+2026-07-31T12:37:01.3806495Z   fetch-tags: false
+2026-07-31T12:37:01.3807542Z   show-progress: true
+2026-07-31T12:37:01.3808521Z   lfs: false
+2026-07-31T12:37:01.3809398Z   set-safe-directory: true
+2026-07-31T12:37:01.3810468Z   allow-unsafe-pr-checkout: false
+2026-07-31T12:37:01.3811934Z ##[endgroup]
+2026-07-31T12:37:01.4871201Z Syncing repository: jason8105/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.4876078Z ##[group]Getting Git version info
+2026-07-31T12:37:01.4879307Z Working directory is '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu'
+2026-07-31T12:37:01.4883805Z [command]/usr/bin/git version
+2026-07-31T12:37:01.4934798Z git version 2.54.0
+2026-07-31T12:37:01.4959317Z ##[endgroup]
+2026-07-31T12:37:01.4975104Z Temporarily overriding HOME='/home/runner/work/_temp/60b93e38-84be-44d6-8a3a-ba6bc9c7afe2' before making global git config changes
+2026-07-31T12:37:01.4980148Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-31T12:37:01.4984678Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.5033467Z Deleting the contents of '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu'
+2026-07-31T12:37:01.5041514Z ##[group]Initializing the repository
+2026-07-31T12:37:01.5048367Z [command]/usr/bin/git init /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.5152319Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-07-31T12:37:01.5154642Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-07-31T12:37:01.5157086Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-07-31T12:37:01.5159092Z hint: call:
+2026-07-31T12:37:01.5159924Z hint:
+2026-07-31T12:37:01.5160984Z hint: 	git config --global init.defaultBranch <name>
+2026-07-31T12:37:01.5162300Z hint:
+2026-07-31T12:37:01.5163464Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-07-31T12:37:01.5165398Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-07-31T12:37:01.5167221Z hint:
+2026-07-31T12:37:01.5168077Z hint: 	git branch -m <name>
+2026-07-31T12:37:01.5169148Z hint:
+2026-07-31T12:37:01.5170391Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-07-31T12:37:01.5179396Z Initialized empty Git repository in /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/.git/
+2026-07-31T12:37:01.5190637Z [command]/usr/bin/git remote add origin https://github.com/jason8105/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.5236093Z ##[endgroup]
+2026-07-31T12:37:01.5238621Z ##[group]Disabling automatic garbage collection
+2026-07-31T12:37:01.5242740Z [command]/usr/bin/git config --local gc.auto 0
+2026-07-31T12:37:01.5284762Z ##[endgroup]
+2026-07-31T12:37:01.5287175Z ##[group]Setting up auth
+2026-07-31T12:37:01.5291998Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-31T12:37:01.5343937Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-31T12:37:01.5721072Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-31T12:37:01.5777372Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-31T12:37:01.6003330Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-31T12:37:01.6042254Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-31T12:37:01.6274059Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-07-31T12:37:01.6313583Z ##[endgroup]
+2026-07-31T12:37:01.6324337Z ##[group]Fetching the repository
+2026-07-31T12:37:01.6329222Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +bab071702e6c98f1f18792b41728c1a9ec0f58d7:refs/remotes/origin/main
+2026-07-31T12:37:01.9775219Z From https://github.com/jason8105/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:01.9777626Z  * [new ref]         bab071702e6c98f1f18792b41728c1a9ec0f58d7 -> origin/main
+2026-07-31T12:37:01.9810778Z ##[endgroup]
+2026-07-31T12:37:01.9812070Z ##[group]Determining the checkout info
+2026-07-31T12:37:01.9813840Z ##[endgroup]
+2026-07-31T12:37:01.9820195Z [command]/usr/bin/git sparse-checkout disable
+2026-07-31T12:37:01.9869352Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-07-31T12:37:01.9900407Z ##[group]Checking out the ref
+2026-07-31T12:37:01.9904528Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-07-31T12:37:02.0394318Z Switched to a new branch 'main'
+2026-07-31T12:37:02.0396366Z branch 'main' set up to track 'origin/main'.
+2026-07-31T12:37:02.0432472Z ##[endgroup]
+2026-07-31T12:37:02.0433457Z ##[group]Setting up auth for fetching submodules
+2026-07-31T12:37:02.0439267Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-07-31T12:37:02.0483234Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+2026-07-31T12:37:02.0515541Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+2026-07-31T12:37:02.0548463Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-209580241@github.com:
+2026-07-31T12:37:02.0579313Z ##[endgroup]
+2026-07-31T12:37:02.0580292Z ##[group]Fetching submodules
+2026-07-31T12:37:02.0582520Z [command]/usr/bin/git submodule sync --recursive
+2026-07-31T12:37:02.0805736Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+2026-07-31T12:37:02.1110497Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
+2026-07-31T12:37:02.1269394Z ##[endgroup]
+2026-07-31T12:37:02.1270267Z ##[group]Persisting credentials for submodules
+2026-07-31T12:37:02.1276384Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+2026-07-31T12:37:02.1522188Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-07-31T12:37:02.1767545Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+2026-07-31T12:37:02.2016812Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-209580241@github.com:'
+2026-07-31T12:37:02.2242178Z ##[endgroup]
+2026-07-31T12:37:02.2314694Z bab071702e6c98f1f18792b41728c1a9ec0f58d7
+2026-07-31T12:37:02.2642968Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-31T12:37:02.2645062Z ##[group]Run actions/setup-java@v4
+2026-07-31T12:37:02.2645520Z with:
+2026-07-31T12:37:02.2646339Z   distribution: temurin
+2026-07-31T12:37:02.2646815Z   java-version: 17
+2026-07-31T12:37:02.2647217Z   cache: gradle
+2026-07-31T12:37:02.2647619Z   java-package: jdk
+2026-07-31T12:37:02.2648063Z   check-latest: false
+2026-07-31T12:37:02.2648496Z   server-id: github
+2026-07-31T12:37:02.2648905Z   server-username: GITHUB_ACTOR
+2026-07-31T12:37:02.2649360Z   server-password: GITHUB_TOKEN
+2026-07-31T12:37:02.2649807Z   overwrite-settings: true
+2026-07-31T12:37:02.2650231Z   job-status: success
+2026-07-31T12:37:02.2652946Z   token: ***
+2026-07-31T12:37:02.2653384Z ##[endgroup]
+2026-07-31T12:37:02.4288384Z ##[group]Installed distributions
+2026-07-31T12:37:02.4352976Z Resolved Java 17.0.19+10 from tool-cache
+2026-07-31T12:37:02.4353888Z Setting Java 17.0.19+10 as the default
+2026-07-31T12:37:02.4364486Z (node:2456) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-07-31T12:37:02.4365557Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-31T12:37:02.4368761Z Creating toolchains.xml for JDK version 17 from temurin
+2026-07-31T12:37:02.4457494Z Writing to /home/runner/.m2/toolchains.xml
+2026-07-31T12:37:02.4458171Z 
+2026-07-31T12:37:02.4458798Z Java configuration:
+2026-07-31T12:37:02.4459565Z   Distribution: temurin
+2026-07-31T12:37:02.4460335Z   Version: 17.0.19+10
+2026-07-31T12:37:02.4461253Z   Path: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:02.4462207Z 
+2026-07-31T12:37:02.4463100Z ##[endgroup]
+2026-07-31T12:37:02.4482641Z Creating settings.xml with server-id: github
+2026-07-31T12:37:02.4483529Z Writing to /home/runner/.m2/settings.xml
+2026-07-31T12:37:02.5897168Z gradle cache is not found
+2026-07-31T12:37:02.6073119Z ##[group]Run lukka/get-cmake@latest
+2026-07-31T12:37:02.6073583Z with:
+2026-07-31T12:37:02.6073927Z   cmakeVersion: 3.28.0
+2026-07-31T12:37:02.6074303Z   useCloudCache: true
+2026-07-31T12:37:02.6074656Z   useLocalCache: false
+2026-07-31T12:37:02.6074996Z env:
+2026-07-31T12:37:02.6075445Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:02.6076414Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:02.6076984Z ##[endgroup]
+2026-07-31T12:37:02.7473732Z useCloudCache:true
+2026-07-31T12:37:02.7474987Z useLocalCache:false
+2026-07-31T12:37:02.7475706Z user defined cmake version:3.28.0
+2026-07-31T12:37:02.7476697Z user defined ninja version:
+2026-07-31T12:37:02.7477205Z cmake version:3.28.0
+2026-07-31T12:37:02.7477615Z ninja version:latest
+2026-07-31T12:37:02.7484554Z ##[group]Computing cache key from the downloads' URLs
+2026-07-31T12:37:02.7485411Z Cache key: '944094833'.
+2026-07-31T12:37:02.7489488Z Local install root: '/home/runner/work/_temp/944094833''.
+2026-07-31T12:37:02.7490787Z ##[endgroup]
+2026-07-31T12:37:02.7491950Z ##[group]Restoring from GitHub cloud cache using key '944094833' into '/home/runner/work/_temp/944094833'
+2026-07-31T12:37:02.8153788Z Cache hit for: 944094833
+2026-07-31T12:37:03.2523365Z Received 52270593 of 52270593 (100.0%), 133.6 MBs/sec
+2026-07-31T12:37:03.2524422Z Cache Size: ~50 MB (52270593 B)
+2026-07-31T12:37:03.2555177Z [command]/usr/bin/tar -xf /home/runner/work/_temp/595a0358-7e63-4bfa-92a8-3b0baff06168/cache.tzst -P -C /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu --use-compress-program unzstd
+2026-07-31T12:37:03.7842525Z Cache restored successfully
+2026-07-31T12:37:03.7878171Z Cloud cache hit.
+2026-07-31T12:37:03.7879653Z ##[endgroup]
+2026-07-31T12:37:03.7880833Z ##[group]Add CMake and Ninja to PATH
+2026-07-31T12:37:03.7881877Z CMake path: '/home/runner/work/_temp/944094833/cmake-3.28.0-linux-x86_64/bin/'
+2026-07-31T12:37:03.7885701Z Ninja path: '/home/runner/work/_temp/944094833'
+2026-07-31T12:37:03.7893835Z ##[group]Validating the installed CMake and Ninja
+2026-07-31T12:37:03.7931478Z CMake actual path is: '/home/runner/work/_temp/944094833/cmake-3.28.0-linux-x86_64/bin/cmake'
+2026-07-31T12:37:03.7932796Z Ninja actual path is: '/home/runner/work/_temp/944094833/ninja'
+2026-07-31T12:37:03.7934404Z ##[endgroup]
+2026-07-31T12:37:03.7935458Z ##[endgroup]
+2026-07-31T12:37:03.7936513Z get-cmake action execution succeeded
+2026-07-31T12:37:03.8108784Z ##[group]Run chmod +x ./gradlew
+2026-07-31T12:37:03.8109283Z [36;1mchmod +x ./gradlew[0m
+2026-07-31T12:37:03.8160217Z shell: /usr/bin/bash -e {0}
+2026-07-31T12:37:03.8160644Z env:
+2026-07-31T12:37:03.8161097Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:03.8161763Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:03.8162282Z ##[endgroup]
+2026-07-31T12:37:03.8306545Z ##[group]Run ./gradlew :module:assembleDebug
+2026-07-31T12:37:03.8307115Z [36;1m./gradlew :module:assembleDebug[0m
+2026-07-31T12:37:03.8353447Z shell: /usr/bin/bash -e {0}
+2026-07-31T12:37:03.8353844Z env:
+2026-07-31T12:37:03.8354301Z   JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:03.8354972Z   JAVA_HOME_17_X64: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.19-10/x64
+2026-07-31T12:37:03.8355486Z ##[endgroup]
+2026-07-31T12:37:05.9137049Z ............10%.............20%............30%.............40%.............50%............60%.............70%.............80%............90%.............100%
+2026-07-31T12:37:06.9844140Z 
+2026-07-31T12:37:06.9854738Z Welcome to Gradle 8.5!
+2026-07-31T12:37:06.9855304Z 
+2026-07-31T12:37:06.9855517Z Here are the highlights of this release:
+2026-07-31T12:37:06.9856413Z  - Support for running on Java 21
+2026-07-31T12:37:06.9857002Z  - Faster first use with Kotlin DSL
+2026-07-31T12:37:06.9857560Z  - Improved error and warning messages
+2026-07-31T12:37:06.9857921Z 
+2026-07-31T12:37:06.9858275Z For more details see https://docs.gradle.org/8.5/release-notes.html
+2026-07-31T12:37:06.9858814Z 
+2026-07-31T12:37:07.0838644Z To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.5/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+2026-07-31T12:37:08.2847311Z Daemon will be stopped at the end of the build 
+2026-07-31T12:37:08.5839069Z Configuration on demand is an incubating feature.
+2026-07-31T12:37:10.6870246Z 
+2026-07-31T12:37:10.6875532Z FAILURE: Build failed with an exception.
+2026-07-31T12:37:10.6905607Z 
+2026-07-31T12:37:10.6947493Z * Where:
+2026-07-31T12:37:10.6948570Z Settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle' line: 19
+2026-07-31T12:37:10.6949486Z 
+2026-07-31T12:37:10.6949644Z * What went wrong:
+2026-07-31T12:37:10.6950615Z Could not compile settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle'.
+2026-07-31T12:37:10.6951640Z > startup failed:
+2026-07-31T12:37:10.6952750Z   settings file '/home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu/settings.gradle': 19: Unexpected input: '===' @ line 19, column 14.
+2026-07-31T12:37:10.6954022Z      === END FILE ===
+2026-07-31T12:37:10.6954378Z                   ^
+2026-07-31T12:37:10.6954719Z   
+2026-07-31T12:37:10.6955019Z   1 error
+2026-07-31T12:37:10.6955197Z 
+2026-07-31T12:37:10.6955331Z 
+2026-07-31T12:37:10.6955475Z * Try:
+2026-07-31T12:37:10.6956126Z > Run with --stacktrace option to get the stack trace.
+2026-07-31T12:37:10.6956806Z > Run with --info or --debug option to get more log output.
+2026-07-31T12:37:10.6957404Z > Run with --scan to get full insights.
+2026-07-31T12:37:10.6957920Z > Get more help at https://help.gradle.org.
+2026-07-31T12:37:10.6958270Z 
+2026-07-31T12:37:10.6958424Z BUILD FAILED in 6s
+2026-07-31T12:37:11.0629906Z ##[error]Process completed with exit code 1.
+2026-07-31T12:37:11.0854574Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-31T12:37:11.0856144Z Post job cleanup.
+2026-07-31T12:37:11.2147224Z (node:2588) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-07-31T12:37:11.2148220Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-31T12:37:11.2426684Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-31T12:37:11.2428758Z Post job cleanup.
+2026-07-31T12:37:11.3351181Z [command]/usr/bin/git version
+2026-07-31T12:37:11.3428541Z git version 2.54.0
+2026-07-31T12:37:11.3469859Z Temporarily overriding HOME='/home/runner/work/_temp/ab278bd0-67f8-49ac-9a7c-978fe555bc19' before making global git config changes
+2026-07-31T12:37:11.3470877Z Adding repository directory to the temporary git global config as a safe directory
+2026-07-31T12:37:11.3476741Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Reveny-Android-ImGui-Mod-Menu/Reveny-Android-ImGui-Mod-Menu
+2026-07-31T12:37:11.3517798Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-07-31T12:37:11.3557954Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-07-31T12:37:11.3814987Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-07-31T12:37:11.3847773Z http.https://github.com/.extraheader
+2026-07-31T12:37:11.3861266Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-07-31T12:37:11.3897301Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-07-31T12:37:11.4160453Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-07-31T12:37:11.4197756Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-07-31T12:37:11.4599327Z Cleaning up orphan processes
+2026-07-31T12:37:11.4864487Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-java@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

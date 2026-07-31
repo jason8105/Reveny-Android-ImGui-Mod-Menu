@@ -2,9 +2,8 @@
 
 class ImGuiHook {
 public:
-    static void Init();
-    static void Cleanup();
-    static void Render();
-    static void HandleTouch(int x, int y, int action);
+    static void init();
+    static void cleanup();
+    static void render();
 };
 === END FILE ===

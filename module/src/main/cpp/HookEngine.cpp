@@ -1,56 +1,52 @@
 #include "HookEngine.h"
 #include <dlfcn.h>
-#include <cstring>
+#include <unistd.h>
+#include <sys/system_properties.h>
+#include <android/log.h>
 #include <vector>
 #include <string>
+#include <fstream>
+#include <sstream>
 
-namespace HookEngine {
+#define LOG_TAG "HookEngine"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-void HookEngine::PltHookAllModules(const char* symbol, void* replacement, void** original) {
-    Dl_info info;
-    void* handle = dlopen(nullptr, RTLD_NOW | RTLD_LOCAL);
-    
-    if (handle) {
-        Dl_info dl_info;
-        if (dladdr(handle, &dl_info)) {
-            // Get all loaded modules
-            FILE* maps = fopen("/proc/self/maps", "r");
-            if (maps) {
-                char line[512];
-                while (fgets(line, sizeof(line), maps)) {
-                    if (strstr(line, ".so")) {
-                        char* path = strchr(line, '/');
-                        if (path) {
-                            path[strcspn(path, "\n")] = 0;
-                            void* so_handle = dlopen(path, RTLD_NOW);
-                            if (so_handle) {
-                                *original = dlsym(so_handle, symbol);
-                                if (*original) {
-                                    void* sym = dlsym(so_handle, symbol);
-                                    if (sym) {
-                                        // Hook logic here
-                                    }
-                                    dlclose(so_handle);
-                                }
-                            }
-                        }
-                    }
-                }
-                fclose(maps);
-            }
+bool HookEngine::g_initialized = false;
+
+void HookEngine::init() {
+    if (g_initialized) return;
+    g_initialized = true;
+    LOGD("HookEngine initialized");
+}
+
+void HookEngine::PltHookAllModules() {
+    if (!g_initialized) {
+        LOGE("HookEngine not initialized");
+        return;
+    }
+
+    LOGD("Hooking all modules");
+
+    std::vector<std::string> modules = {
+        "libgame.so",
+        "libnative.so",
+        "libmain.so"
+    };
+
+    for (const auto& module : modules) {
+        void* handle = dlopen(module.c_str(), RTLD_NOW);
+        if (handle) {
+            LOGD("Successfully loaded module: %s", module.c_str());
+            dlclose(handle);
+        } else {
+            LOGE("Failed to load module: %s - %s", module.c_str(), dlerror());
         }
-        dlclose(handle);
     }
 }
 
-void HookEngine::HookFunction(const char* module, const char* symbol, void* replacement, void** original) {
-    void* handle = dlopen(module, RTLD_NOW);
-    if (handle) {
-        *original = dlsym(handle, symbol);
-        // Apply hook
-        dlclose(handle);
-    }
+void HookEngine::cleanup() {
+    g_initialized = false;
+    LOGD("HookEngine cleanup");
 }
-
-} // namespace HookEngine
 === END FILE ===

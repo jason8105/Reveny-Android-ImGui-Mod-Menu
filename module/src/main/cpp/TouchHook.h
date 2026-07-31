@@ -2,9 +2,9 @@
 
 class TouchHook {
 public:
-    static void Initialize();
-    static void SetMenuVisible(bool visible);
-    static void Cleanup();
-    static bool IsMenuVisible();
+    static void init();
+    static void cleanup();
+    static bool isMenuOpen();
+    static void setMenuOpen(bool open);
 };
 === END FILE ===
