@@ -3,15 +3,23 @@ plugins {
 }
 
 android {
-    namespace 'com.reveny.modmenu'
+    namespace 'com.reveny.imguimodmenu'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.reveny.modmenu"
-        minSdk 21
+        applicationId "com.reveny.imguimodmenu"
+        minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags ""
+                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DCMAKE_VERBOSE_MAKEFILE=ON"
+            }
+        }
 
         ndk {
             abiFilters 'arm64-v8a'
@@ -25,16 +33,28 @@ android {
         }
         debug {
             minifyEnabled false
+            externalNativeBuild {
+                cmake {
+                    arguments "-DCMAKE_BUILD_TYPE=Debug"
+                }
+            }
         }
     }
 
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
-            version "3.22"
+            path "CMakeLists.txt"
+            version "3.22.1"
         }
     }
-    
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            jni.srcDirs = []
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -42,5 +62,5 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

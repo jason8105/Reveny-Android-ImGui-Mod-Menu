@@ -1,75 +1,52 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.22.1)
 
-project(RevenyModMenu)
+project("ImGuiModMenu")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# KittyMemory
-set(KITTYMEMORY_DIR ${CMAKE_SOURCE_DIR}/app/src/main/cpp/KittyMemory)
-add_subdirectory(${KITTYMEMORY_DIR})
+set(NDK_SUPPORT_HEADERS_DIR
+    ${PROJECT_SOURCE_DIR}/KittyMemory/MemoryProcessHelper/include
+    ${PROJECT_SOURCE_DIR}/KittyMemory/SymHook/include
+    ${PROJECT_SOURCE_DIR}/KittyMemory/Utils/include)
 
-# ImGui
-set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/app/src/main/cpp/imgui)
-add_subdirectory(${IMGUI_DIR})
+set(NDK_LIBS_DIR ${CMAKE_SOURCE_DIR}/libs)
 
-# HookEngine/Dobby
-set(HOOK_ENGINE_DIR ${CMAKE_SOURCE_DIR}/app/src/main/cpp/HookEngine)
-add_subdirectory(${HOOK_ENGINE_DIR})
+set(NDK_INCLUDE_DIRS
+    ${NDK_SUPPORT_HEADERS_DIR})
 
-# Main module source
-set(MODULE_SOURCES
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/native-lib.cpp
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/HookEngine/HookEngine.cpp
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/HookEngine/PltHook.cpp
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/HookEngine/Logger.cpp
-    ${KITTYMEMORY_DIR}/KittyMemory.cpp
-    ${KITTYMEMORY_DIR}/KittyOS.cpp
-    ${KITTYMEMORY_DIR}/KittyUtils.cpp
-    ${IMGUI_DIR}/imgui.cpp
-    ${IMGUI_DIR}/imgui_demo.cpp
-    ${IMGUI_DIR}/imgui_draw.cpp
-    ${IMGUI_DIR}/imgui_tables.cpp
-    ${IMGUI_DIR}/imgui_widgets.cpp
-    ${IMGUI_DIR}/imgui_backends/imgui_impl_android.cpp
-    ${IMGUI_DIR}/imgui_backends/imgui_impl_opengles2.cpp
+add_definitions(-DLOG_TAG=\"ImGuiModMenu\")
+
+set(NDK_LIBS
+    # Add your static libraries here
 )
 
-# Touch hooks
-set(TOUCH_HOOKS
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/touch/AInputQueue.cpp
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/touch/TouchHook.cpp
+# Add native source
+add_library(imgui_native SHARED
+    src/main/cpp/native-lib.cpp
+    src/main/cpp/Hooks/TouchHook.cpp
+    src/main/cpp/Hooks/ImGuiHook.cpp
+    src/main/cpp/Hooks/HookEngine.cpp
+    src/main/cpp/utils/Utils.cpp
+    src/main/cpp/Imgui/ImGui.cpp
 )
 
-add_library(${CMAKE_PROJECT_NAME} SHARED
-    ${MODULE_SOURCES}
-    ${TOUCH_HOOKS}
-)
-
-# Include directories
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/KittyMemory
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/HookEngine
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/imgui
-    ${CMAKE_SOURCE_DIR}/app/src/main/cpp/imgui/backends
-)
-
-# Link libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
+target_link_libraries(
+    imgui_native
+    android
     log
-    jnigraphics
     EGL
     GLESv2
-    pthread
     m
-)
+    z
+    ${NDK_LIBS})
 
-# Android specific settings
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
-    -fpermissive
-    -frtti
-    -fexceptions
-    -Wno-error=format-security
-)
+set_target_properties(imgui_native PROPERTIES
+    CXX_VISIBILITY_PRESET hidden
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF)
+
+include_directories(${PROJECT_SOURCE_DIR}/src/main/cpp)
+include_directories(${PROJECT_SOURCE_DIR}/KittyMemory)
