@@ -1,7 +1,10 @@
-#pragma once
+#ifndef HOOK_ENGINE_H
+#define HOOK_ENGINE_H
 
-class HookEngine {
-public:
-    static void PltHookAllModules();
-};
+namespace HookEngine {
+    void PltHookAllModules();
+    void InitImGui();
+}
+
+#endif
 === END FILE ===

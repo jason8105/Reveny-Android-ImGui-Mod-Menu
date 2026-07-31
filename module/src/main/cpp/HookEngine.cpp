@@ -1,11 +1,19 @@
 #include "HookEngine.h"
 #include <dlfcn.h>
-#include <cstring>
+#include <unistd.h>
+#include <sys/system_properties.h>
+#include <android/log.h>
 
-void HookEngine::PltHookAllModules() {
-    void* handle = dlopen("libandroid.so", RTLD_NOW);
-    if (handle) {
-        dlclose(handle);
+#define LOG_TAG "HookEngine"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+
+namespace HookEngine {
+    void PltHookAllModules() {
+        LOGD("Hooking all modules");
+    }
+    
+    void InitImGui() {
+        LOGD("Initializing ImGui");
     }
 }
 === END FILE ===

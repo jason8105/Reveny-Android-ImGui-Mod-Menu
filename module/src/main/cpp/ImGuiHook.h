@@ -1,8 +1,11 @@
-#pragma once
+#ifndef IMGUI_HOOK_H
+#define IMGUI_HOOK_H
 
-class ImGuiHook {
-public:
-    static void Initialize();
-    static void Render();
-};
+namespace ImGuiHook {
+    void Init();
+    void Render();
+    void SwapBuffers();
+}
+
+#endif
 === END FILE ===

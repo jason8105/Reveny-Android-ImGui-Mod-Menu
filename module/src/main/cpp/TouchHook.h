@@ -1,7 +1,11 @@
-#pragma once
+#ifndef TOUCH_HOOK_H
+#define TOUCH_HOOK_H
 
-class TouchHook {
-public:
-    static void Initialize();
-};
+namespace TouchHook {
+    void Init();
+    bool IsMenuOpen();
+    void InjectTouch(int x, int y, int action);
+}
+
+#endif
 === END FILE ===

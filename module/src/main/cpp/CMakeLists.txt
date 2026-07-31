@@ -13,19 +13,17 @@ add_library(RevenyModMenu SHARED
     src/main/cpp/ImGuiHook.cpp
 )
 
+target_include_directories(RevenyModMenu PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/main/cpp
+    ${CMAKE_SOURCE_DIR}/../..
+)
+
+find_library(log-lib log)
+
 target_link_libraries(RevenyModMenu
-    log
+    ${log-lib}
     android
     EGL
     GLESv3
-    jnigraphics
-)
-
-find_library(egl-lib EGL)
-find_library(glesv2-lib GLESv2)
-
-target_link_libraries(RevenyModMenu
-    ${egl-lib}
-    ${glesv2-lib}
 )
 === END FILE ===

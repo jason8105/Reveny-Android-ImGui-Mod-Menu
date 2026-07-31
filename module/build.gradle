@@ -15,7 +15,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17 -fpermissive"
+                cppFlags "-std=c++17 -frtti -fexceptions"
                 arguments "-DANDROID_STL=c++_shared"
             }
         }
@@ -48,8 +48,9 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.github.tiann:FreeReflection:3.1.0'
+    implementation 'com.github.tiann:FreeCpu:1.0.0'
+    implementation 'com.github.tiann:FreeLog:1.0.0'
+    implementation 'com.github.tiann:FreeReflection:3.1.0'
 }
 === END FILE ===
