@@ -1,17 +1,10 @@
-.gradle/
-build/
-*.apk
-*.aab
-*.so
-*.class
-*.jar
-*.war
-*.ear
-*.zip
-*.tar.gz
-*.log
-.DS_Store
-.idea/
 *.iml
-local.properties
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
 === END FILE ===
