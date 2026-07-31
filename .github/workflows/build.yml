@@ -1,0 +1,38 @@
+name: Build Zygisk Module
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Setup NDK (via sdkmanager)
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "ndk;25.2.8569804"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.2.8569804" >> $GITHUB_ENV
+          echo "$ANDROID_HOME/ndk/25.2.8569804" >> $GITHUB_PATH
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build module zip
+        run: |
+          chmod +x gradlew
+          ./gradlew clean assembleRelease
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zygisk-module
+          path: build/outputs/module/*.zip
