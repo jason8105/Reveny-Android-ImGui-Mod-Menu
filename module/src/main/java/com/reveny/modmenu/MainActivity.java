@@ -5,29 +5,22 @@ import android.os.Bundle;
 
 public class MainActivity extends Activity {
     static {
-        System.loadLibrary("RevenyNative");
+        System.loadLibrary("reveny_mod_menu");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initNative();
+        initModMenu();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        renderOverlay();
+    protected void onDestroy() {
+        super.onDestroy();
+        cleanupModMenu();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        cleanupNative();
-    }
-
-    private native void initNative();
-    private native void renderOverlay();
-    private native void cleanupNative();
+    public native void initModMenu();
+    public native void cleanupModMenu();
 }
 === END FILE ===

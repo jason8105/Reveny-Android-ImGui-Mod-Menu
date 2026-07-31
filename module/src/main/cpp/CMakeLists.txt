@@ -1,35 +1,59 @@
-cmake_minimum_required(VERSION 3.18.1)
+cmake_minimum_required(VERSION 3.22.1)
 
-project("RevenyImGui")
+project("RevenyModMenu")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(ANDROID_STL c++_shared)
-
-add_library(${CMAKE_PROJECT_NAME} SHARED
-    src/main/cpp/native-lib.cpp
-    src/main/cpp/HookEngine.cpp
-    src/main/cpp/TouchHook.cpp
-    src/main/cpp/ImGui/imgui.cpp
-    src/main/cpp/ImGui/imgui_demo.cpp
-    src/main/cpp/ImGui/imgui_draw.cpp
-    src/main/cpp/ImGui/imgui_tables.cpp
-    src/main/cpp/ImGui/imgui_widgets.cpp
-    src/main/cpp/ImGui/imgui_backend.cpp
+add_library(
+    reveny_mod_menu
+    SHARED
+    src/main/cpp/main.cpp
+    src/main/cpp/hook_engine.cpp
+    src/main/cpp/imgui_renderer.cpp
+    src/main/cpp/touch_hook.cpp
 )
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/src/main/cpp/ImGui
+target_include_directories(
+    reveny_mod_menu
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/main/cpp/include
+    ${CMAKE_SOURCE_DIR}/src/main/cpp/imgui
 )
 
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    android
+find_library(
+    log-lib
     log
+)
+
+find_library(
+    android-lib
+    android
+)
+
+find_library(
+    egl-lib
     EGL
+)
+
+find_library(
+    gpu-lib
     GLESv3
-    jnigraphics
+)
+
+find_library(
+    input-lib
+    input
+)
+
+target_link_libraries(
+    reveny_mod_menu
+    ${log-lib}
+    ${android-lib}
+    ${egl-lib}
+    ${gpu-lib}
+    ${input-lib}
+    android
 )
 === END FILE ===

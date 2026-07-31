@@ -1,8 +1,8 @@
 pluginManagement {
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -16,5 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Reveny-Android-ImGui-Mod-Menu"
 include ':module'
-include ':native'
+include ':app'
 === END FILE ===

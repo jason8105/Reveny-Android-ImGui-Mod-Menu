@@ -5,8 +5,13 @@ build/
 *.so
 *.class
 *.jar
-*.iml
+*.war
+*.ear
+*.zip
+*.tar.gz
 *.log
-local.properties
 .DS_Store
+.idea/
+*.iml
+local.properties
 === END FILE ===

@@ -1,51 +1,41 @@
 #include <jni.h>
+#include <string>
 #include <dlfcn.h>
+#include <pthread.h>
 #include <unistd.h>
 #include <sys/system_properties.h>
-#include <android/log.h>
-#include <thread>
-#include <chrono>
 
-#define LOG_TAG "RevenyModMenu"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
-#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
+#include "hook_engine.h"
+#include "imgui_renderer.h"
+#include "touch_hook.h"
+
+static bool g_initialized = false;
+static pthread_t g_hook_thread;
 
 extern "C" {
-    void ZygiskPreAppSpecialize(struct android_app* app, void* args);
-    void ZygiskPostAppSpecialize(const void* args);
+
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_initModMenu(JNIEnv *env, jobject /* this */) {
+    if (g_initialized) return;
+    g_initialized = true;
+
+    pthread_create(&g_hook_thread, nullptr, [] (void *arg) -> void * {
+        HookEngine::init();
+        TouchHook::init();
+        ImGuiRenderer::init();
+        return nullptr;
+    }, nullptr);
 }
 
-void* g_libHandle = nullptr;
-bool g_isHooked = false;
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_cleanupModMenu(JNIEnv *env, jobject /* this */) {
+    if (!g_initialized) return;
+    g_initialized = false;
 
-void initImGui() {
-    LOGD("Initializing ImGui...");
-    // Initialize ImGui context and hooks here
+    ImGuiRenderer::cleanup();
+    TouchHook::cleanup();
+    HookEngine::cleanup();
 }
 
-void renderImGui() {
-    // Render ImGui overlay
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_reveny_modmenu_MainActivity_initModMenu(JNIEnv* env, jobject /* this */) {
-    LOGD("Mod menu initialized");
-    initImGui();
-}
-
-extern "C" JNIEXPORT void JNICALL
-Java_com_reveny_modmenu_MainActivity_renderOverlay(JNIEnv* env, jobject /* this */) {
-    renderImGui();
-}
-
-void ZygiskPreAppSpecialize(struct android_app* app, void* args) {
-    LOGD("ZygiskPreAppSpecialize called");
-}
-
-void ZygiskPostAppSpecialize(const void* args) {
-    LOGD("ZygiskPostAppSpecialize called");
-    
-    // Hook graphics and input here
-    initImGui();
 }
 === END FILE ===
