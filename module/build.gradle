@@ -1,57 +1,44 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
 }
 
 android {
-    namespace 'com.reveny.zygisk.imgui'
+    namespace 'com.reveny.module'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.reveny.zygisk.imgui"
-        minSdk 24
+        minSdk 21
         targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17 -frtti -fexceptions"
-                arguments "-DANDROID_STL=c++_shared"
+                arguments "-DANDROID_STL=c++_shared", "-DANDROID_TOOLCHAIN=clang"
             }
-        }
-
-        ndk {
-            abiFilters 'arm64-v8a', 'x86_64'
         }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            minifyEnabled false
         }
     }
 
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            path "../CMakeLists.txt"
             version "3.22.1"
         }
     }
-
-    packagingOptions {
-        jniLibs {
-            useLegacyPackaging true
-        }
-        resources {
-            useLegacyPackaging true
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+            jni.srcDirs = []
         }
     }
-}
-
-dependencies {
-    implementation 'io.github.vvv:imgui-android:1.89'
 }
