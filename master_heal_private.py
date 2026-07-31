@@ -5,6 +5,7 @@ import subprocess
 import requests
 import re
 import datetime
+import json
 
 # ==========================================
 # DUAL LOGGING SETUP (Display + File)
@@ -294,9 +295,10 @@ ERROR LOGS / STATUS CONTEXT:
         "model": MODEL_NAME,
         "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 4096,
+        "temperature": 0.1,
         "venice_parameters": {
-            "enable_web_search": "auto",
-            "enable_web_scraping": True,
+            "enable_web_search": "off",
+            "enable_web_scraping": False,
             "include_venice_system_prompt": True
         }
     }
@@ -304,48 +306,68 @@ ERROR LOGS / STATUS CONTEXT:
     print(f"\n[*] Sending request to Venice AI Model: {MODEL_NAME} with ImGui/Touch context...")
 
     try:
-        response = requests.post(chat_url, headers=headers, json=payload, timeout=120)
+        response = requests.post(chat_url, headers=headers, json=payload, timeout=180)
+        if response.status_code != 200:
+            print(f"[!] API returned HTTP {response.status_code}: {response.text[:300]}")
+            return f"API Error: HTTP {response.status_code}"
+
         res_json = response.json()
         
-        ai_message = res_json.get('choices', [{}])[0].get('message', {}).get('content', '')
+        # Check for top-level API errors first
+        if "error" in res_json:
+            api_err = res_json["error"].get("message", "Unknown API error")
+            print(f"[!] Venice API returned error: {api_err}")
+            return f"API Error: {api_err}"
+
+        choices = res_json.get("choices", [])
+        if not choices:
+            print("[!] Venice API returned empty choices array.")
+            return "API Error: Empty choices response"
+
+        ai_message = choices[0].get("message", {}).get("content", "")
         
-        if ai_message and ai_message.strip():
-            print(f"[+] Success getting response from Venice Model: {MODEL_NAME}")
-            return ai_message
-        else:
-            error_msg = res_json.get('error', {}).get('message', 'Unknown Error or Empty Response')
-            print(f"[!] Venice API Error: {error_msg}")
-            return f"API Error: {error_msg}"
+        if not ai_message or not ai_message.strip():
+            print("[!] Venice AI returned an empty message block.")
+            return "API Error: Model returned empty content"
+            
+        print(f"[+] Success getting response from Venice Model: {MODEL_NAME}")
+        return ai_message
+
+    except requests.exceptions.Timeout:
+        print("[!] Request timed out after 180 seconds.")
+        return "API Error: Request timed out"
+    except requests.exceptions.RequestException as e:
+        print(f"[!] Network error calling Venice API: {e}")
+        return f"API Error: {str(e)}"
+    except json.JSONDecodeError:
+        print("[!] Failed to decode JSON response from Venice API.")
+        return "API Error: Invalid JSON response"
     except Exception as e:
-        print(f"[!] Network error/timeout calling Venice API: {str(e)}")
+        print(f"[!] Unexpected error calling Venice API: {e}")
         return f"API Error: {str(e)}"
 
 def apply_ai_patches(ai_response):
     changes_made = []
 
-    if not ai_response or "API Error" in ai_response:
-        print(f"[!] API Error encountered: {ai_response}")
+    if not ai_response or len(ai_response) < 15:
+        print(f"[!] API response too short/empty. Skipping patches. Preview: {ai_response[:100]}")
         return [], "fix: api error fallback"
 
-    # Clean markdown code fences safely
+    # Safely strip markdown code fences
     ai_response = re.sub(r"^```[a-zA-Z]*\n", "", ai_response, flags=re.MULTILINE)
-    ai_response = re.sub(r"\n```\s*$", "", ai_response)
+    ai_response = re.sub(r"\n```\s*$", "", ai_response, flags=re.MULTILINE)
+    ai_response = ai_response.strip()
 
     commit_match = re.search(r"=== COMMIT:\s*([^\n]+)\s*===", ai_response)
     commit_message = commit_match.group(1).strip() if commit_match else "fix: resolve build and compilation errors"
 
-    # Robust regex to extract FILE blocks
-    pattern_explicit = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)\s*=== END FILE ==="
-    matches_file = re.findall(pattern_explicit, ai_response, re.DOTALL)
+    # Fixed regex: single quotes prevent syntax errors from internal double quotes
+    pattern_file = r'=== FILE:\s*([^\n]+?)\s*===\s*\n(.*?)(?==== FILE:|=== DELETE:|\Z)'
+    matches_file = re.findall(pattern_file, ai_response, re.DOTALL)
     
-    # Fallback pattern if explicit END tags are missing
-    if not matches_file:
-        pattern_fallback = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)(?==== FILE:|=== DELETE:|\Z)"
-        matches_file = re.findall(pattern_fallback, ai_response, re.DOTALL)
-
     for file_path, content in matches_file:
         file_path = file_path.strip().replace("\r", "").strip("`").strip()
-        content = content.strip().replace("=== END FILE ===", "").strip()
+        content = content.strip()
         
         # Double safe markdown stripping
         content = re.sub(r"^```[a-zA-Z]*\n", "", content)
@@ -378,7 +400,7 @@ def apply_ai_patches(ai_response):
             changes_made.append(f"Deleted: {file_path}")
 
     if not changes_made:
-        print("[!] Warning: Response received from model but could not parse patch blocks. Saving to ai_fix_suggestion.txt")
+        print("[!] Warning: Response received from model but could not parse patch blocks. Saving raw response.")
         with open("ai_fix_suggestion.txt", "w", encoding="utf-8") as f:
             f.write(ai_response)
         return [], commit_message
