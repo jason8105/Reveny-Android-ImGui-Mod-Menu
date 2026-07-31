@@ -1,24 +1,24 @@
 #pragma once
 
-#define IMGUI_VERSION "1.90.0"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-// Main API
-typedef struct ImGuiIO ImGuiIO;
-
-struct ImGuiIO {
-    // Add settings
-};
-
-void ImGui_Init();
-void ImGui_Shutdown();
-void ImGui_NewFrame();
-void ImGui_Render();
-
-#ifdef __cplusplus
+// ImGui Context and Window Management
+namespace ImGui {
+    void CreateContext(ImFontAtlas* shared_font_atlas = nullptr);
+    void DestroyContext(ImGuiContext* ctx = nullptr);
+    ImGuiContext* GetCurrentContext();
+    void SetCurrentContext(ImGuiContext* ctx);
+    
+    void NewFrame();
+    void Render();
+    ImDrawData* GetDrawData();
+    
+    // Window Position and Size
+    void SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0, const ImVec2& pivot = ImVec2(0, 0));
+    void SetNextWindowSize(const ImVec2& size, ImGuiCond cond = 0);
+    void SetNextWindowSizeConstraints(const ImVec2& size_min, const ImVec2& size_max, ImGuiSizeCallback custom_callback = nullptr, void* custom_callback_data = nullptr);
+    
+    // Main Menu
+    void ShowDemoWindow(bool* p_open = nullptr);
+    void ShowStyleEditor(ImGuiStyle* ref = nullptr);
+    void ShowMetricsWindow(bool* p_open = nullptr);
 }
-#endif
 === END FILE ===
