@@ -10,8 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "RevenyModMenu"
+rootProject.name = "Reveny-Android-ImGui-Mod-Menu"
 include ':module'
 === END FILE ===

@@ -1,25 +1,32 @@
 #include <jni.h>
 #include <string>
 #include <dlfcn.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <sys/system_properties.h>
+#include <thread>
+#include <chrono>
 
 extern "C" {
-    void hook_init();
-    void hook_cleanup();
+    void ZygiskInit();
+    void HookEngine::PltHookAllModules();
+    void TouchHook::Initialize();
+    void ImGuiRenderer::Render();
 }
 
-static void* thread_func(void* arg) {
-    sleep(3);
-    hook_init();
-    return nullptr;
+void ZygiskInit() {
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    HookEngine::PltHookAllModules();
+    TouchHook::Initialize();
+    
+    std::thread renderThread([]() {
+        while (true) {
+            ImGuiRenderer::Render();
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        }
+    });
+    renderThread.detach();
 }
 
 JNIEXPORT void JNICALL
-Java_com_reveny_modmenu_MainActivity_init(JNIEnv* env, jobject thiz) {
-    pthread_t thread;
-    pthread_create(&thread, nullptr, thread_func, nullptr);
-}
+Java_com_reveny_modmenu_MainActivity_initMod(JNIEnv *env, jobject /* this */) {
+    ZygiskInit();
 }
 === END FILE ===
