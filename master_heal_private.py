@@ -44,11 +44,29 @@ class TeeLogger:
             except Exception:
                 pass
 
-# Redirect stdout and stderr to both screen and file
 sys.stdout = TeeLogger(LOG_FILE)
 sys.stderr = sys.stdout
 
 print(f"[*] Logging initialized. Saving session history to: {LOG_FILE}")
+
+# ==========================================
+# AUTO-DETECT GITHUB REPOSITORY FROM LOCAL GIT
+# ==========================================
+def auto_detect_git_repo():
+    try:
+        remote_url = subprocess.check_output(
+            ["git", "config", "--get", "remote.origin.url"],
+            stderr=subprocess.DEVNULL,
+            text=True
+        ).strip()
+        match = re.search(r"github\.com[:/]([^/]+)/([^/.]+)(?:\.git)?$", remote_url)
+        if match:
+            return match.group(1), match.group(2)
+    except Exception:
+        pass
+    return None, None
+
+auto_owner, auto_repo = auto_detect_git_repo()
 
 # ==========================================
 # VENICE API KEY & MODEL CONFIG
@@ -66,7 +84,6 @@ else:
     API_KEY = ""
     print("[!] Critical Error: VENICE_API_KEY not found!")
 
-# Read model dynamically from 'borcher' file or default to token-efficient Qwen 3.5 35B A3B
 MODEL_NAME = "qwen3-5-35b-a3b"
 if os.path.exists("borcher"):
     try:
@@ -80,16 +97,20 @@ if os.path.exists("borcher"):
 print(f"[*] Target Venice AI Model set to: {MODEL_NAME}")
 
 # ==========================================
-# MANUAL REPOSITORY SELECTION
+# REPOSITORY SELECTION
 # ==========================================
 print("\n==================================================")
 print(" Full-Auto Venice Private Zygisk Builder & Touch Fixer")
 print("==================================================")
-_owner = input("Enter GitHub Username/Owner (Press Enter for 'jason8105'): ").strip()
-REPO_OWNER = _owner if _owner else "jason8105"
 
-_repo = input("Enter Repository Name (Press Enter for 'Zygisk-imgui-touch-fix'): ").strip()
-REPO_NAME = _repo if _repo else "Zygisk-imgui-touch-fix"
+default_owner = auto_owner if auto_owner else "jason8105"
+default_repo = auto_repo if auto_repo else "Reveny-Android-ImGui-Mod-Menu"
+
+_owner = input(f"Enter GitHub Username/Owner (Press Enter for '{default_owner}'): ").strip()
+REPO_OWNER = _owner if _owner else default_owner
+
+_repo = input(f"Enter Repository Name (Press Enter for '{default_repo}'): ").strip()
+REPO_NAME = _repo if _repo else default_repo
 
 print(f"\n[*] Target Repository set to: {REPO_OWNER}/{REPO_NAME}")
 print("==================================================\n")
@@ -109,11 +130,29 @@ def run_cmd(cmd):
     return result.stdout + result.stderr
 
 def trigger_workflow_dispatch():
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/workflows/build.yml/dispatches"
+    # Attempt to fetch dynamic workflows first
+    url_workflows = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/workflows"
     try:
-        requests.post(url, headers=HEADERS_GH, json={"ref": "main"}, timeout=10)
+        res = requests.get(url_workflows, headers=HEADERS_GH, timeout=10)
+        if res.status_code == 200:
+            workflows = res.json().get("workflows", [])
+            if workflows:
+                wf_id = workflows[0]["id"]
+                dispatch_url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/workflows/{wf_id}/dispatches"
+                requests.post(dispatch_url, headers=HEADERS_GH, json={"ref": "main"}, timeout=10)
+                return
     except Exception:
         pass
+
+    # Fallback to standard build workflow filenames
+    for wf in ["build.yml", "main.yml", "build_zygisk.yml"]:
+        url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/workflows/{wf}/dispatches"
+        try:
+            res = requests.post(url, headers=HEADERS_GH, json={"ref": "main"}, timeout=10)
+            if res.status_code in [204, 200]:
+                break
+        except Exception:
+            pass
 
 def get_latest_workflow_run():
     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/actions/runs?per_page=1"
@@ -180,7 +219,6 @@ def get_workflow_logs(run_id, max_retries=5):
                         print(f"[!] Failed to get log text. Status {log_res.status_code}")
 
             if failed_logs:
-                # Clean noise completely (progress bars, downloads, unzipping, license boilerplate) and grab the last 400 clean lines
                 lines = failed_logs.splitlines()
                 clean_lines = []
                 
@@ -289,28 +327,29 @@ def apply_ai_patches(ai_response):
         print(f"[!] API Error encountered: {ai_response}")
         return [], "fix: api error fallback"
 
+    # Clean markdown code fences safely
     ai_response = re.sub(r"^```[a-zA-Z]*\n", "", ai_response, flags=re.MULTILINE)
+    ai_response = re.sub(r"\n```\s*$", "", ai_response)
 
     commit_match = re.search(r"=== COMMIT:\s*([^\n]+)\s*===", ai_response)
     commit_message = commit_match.group(1).strip() if commit_match else "fix: resolve build and compilation errors"
 
-    pattern_file = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)(?==== FILE:|=== DELETE:|\Z)"
-    matches_file = re.findall(pattern_file, ai_response, re.DOTALL)
-    
+    # Robust regex to extract FILE blocks
     pattern_explicit = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)\s*=== END FILE ==="
-    matches_explicit = re.findall(pattern_explicit, ai_response, re.DOTALL)
-    if matches_explicit:
-        matches_file = matches_explicit
+    matches_file = re.findall(pattern_explicit, ai_response, re.DOTALL)
+    
+    # Fallback pattern if explicit END tags are missing
+    if not matches_file:
+        pattern_fallback = r"=== FILE:\s*([^\n]+)===\s*\n(.*?)(?==== FILE:|=== DELETE:|\Z)"
+        matches_file = re.findall(pattern_fallback, ai_response, re.DOTALL)
 
     for file_path, content in matches_file:
         file_path = file_path.strip().replace("\r", "").strip("`").strip()
         content = content.strip().replace("=== END FILE ===", "").strip()
         
-        if content.startswith("```"):
-            content = re.sub(r"^```[a-zA-Z]*\n", "", content)
-        if content.endswith("```"):
-            content = re.sub(r"\n```\s*$", "", content)
-            
+        # Double safe markdown stripping
+        content = re.sub(r"^```[a-zA-Z]*\n", "", content)
+        content = re.sub(r"\n```\s*$", "", content)
         content = content.strip()
 
         if not file_path or len(file_path) > 200:
@@ -363,11 +402,15 @@ def master_loop():
             except Exception:
                 pass
 
-            print("[*] Checking GitHub for active workflow run...")
+            print(f"[*] Checking GitHub ({REPO_OWNER}/{REPO_NAME}) for active workflow run...")
             run_id, status = get_latest_workflow_run()
 
-            if not run_id or run_id == last_processed_run_id:
+            if not run_id:
                 time.sleep(15)
+                continue
+
+            if run_id == last_processed_run_id:
+                time.sleep(10)
                 continue
 
             print(f"[*] Monitoring Workflow Run ID: {run_id} | Status: {status}")
@@ -385,6 +428,7 @@ def master_loop():
             try:
                 run_details = requests.get(url, headers=HEADERS_GH, timeout=15).json()
                 conclusion = run_details.get("conclusion")
+                print(f"[*] Build completed. Conclusion: {conclusion}")
             except Exception as e:
                 print(f"[!] Network error checking build conclusion: {e}. Retrying...")
                 time.sleep(15)
@@ -403,8 +447,8 @@ def master_loop():
                     print("[!] Artifact validation failed (empty zip size). Forcing Auto-Heal...")
                     conclusion = "failure"
 
-            if conclusion in ["failure", "cancelled", "timed_out"]:
-                print(f"[!] Build failed or artifact was invalid (conclusion: {conclusion}). Initiating Auto-Heal...")
+            if conclusion in ["failure", "cancelled", "timed_out"] or conclusion != "success":
+                print(f"[!] Build failed or status invalid (conclusion: {conclusion}). Initiating Auto-Heal...")
 
                 logs = get_workflow_logs(run_id)
                 if "Log fetch error" in logs:
