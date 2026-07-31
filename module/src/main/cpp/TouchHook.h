@@ -2,7 +2,9 @@
 #define TOUCH_HOOK_H
 
 namespace TouchHook {
-    void Initialize();
+    void Init();
+    bool IsMenuVisible();
+    void SetMenuVisible(bool visible);
 }
 
 #endif

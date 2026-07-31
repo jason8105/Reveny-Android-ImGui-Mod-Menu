@@ -3,6 +3,7 @@
 
 namespace HookEngine {
     void PltHookAllModules();
+    void InitImGui();
 }
 
 #endif
