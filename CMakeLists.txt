@@ -1,35 +1,40 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-project(ZygiskImGui)
+project(ZygiskImGuiTouchFix)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_library(log-lib log)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_library(
-    zygisk_module
-    SHARED
-    src/main/cpp/native-lib.cpp
-    src/main/cpp/imgui/imgui.cpp
-    src/main/cpp/imgui/imgui_draw.cpp
-    src/main/cpp/imgui/imgui_tables.cpp
-    src/main/cpp/imgui/imgui_widgets.cpp
-    src/main/cpp/imgui/imgui_impl_opengl3.cpp
-    src/main/cpp/imgui/imgui_impl_android.cpp
-    src/main/cpp/hook/HookEngine.cpp
-    src/main/cpp/hook/TouchHook.cpp
+set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/imgui)
+
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_demo.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_android.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
-target_link_libraries(
-    zygisk_module
-    ${log-lib}
+add_library(ZygiskImGuiTouchFix SHARED
+    src/main/cpp/native-lib.cpp
+    ${IMGUI_SOURCES}
+)
+
+target_include_directories(ZygiskImGuiTouchFix PRIVATE
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+    ${CMAKE_SOURCE_DIR}/src/main/cpp/include
+)
+
+target_link_libraries(ZygiskImGuiTouchFix
     android
+    log
     EGL
     GLESv3
+    jnigraphics
 )
-
-target_compile_options(zygisk_module PRIVATE -fexceptions -frtti)
-target_compile_definitions(zygisk_module PRIVATE IMGUI_IMPL_OPENGL_LOADER_EGL)
-
-=== END FILE ===
