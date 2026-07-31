@@ -1,32 +1,56 @@
 #include <jni.h>
 #include <string>
+#include <dlfcn.h>
+#include <unistd.h>
+#include <sys/system_properties.h>
 #include <android/log.h>
-#include "HookEngine.h"
-#include "TouchHook.h"
-#include "ImGuiHook.h"
+#include <pthread.h>
 
 #define LOG_TAG "RevenyImGui"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_reveny_main_MainActivity_initNative(JNIEnv* env, jobject /* this */) {
-    LOGD("Initializing native hooks...");
+#include "HookEngine.h"
+#include "TouchHook.h"
+
+static bool g_initialized = false;
+static bool g_menu_visible = false;
+
+extern "C" {
+
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_initModMenu(JNIEnv* env, jobject thiz) {
+    if (g_initialized) return;
     
-    HookEngine::Init();
-    TouchHook::Init();
-    ImGuiHook::Init();
+    LOGD("Initializing Reveny Mod Menu");
     
-    LOGD("Native hooks initialized successfully");
+    HookEngine::PltHookAllModules();
+    TouchHook::Initialize();
+    
+    g_initialized = true;
+    LOGD("Mod Menu initialized successfully");
 }
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_reveny_main_MainActivity_cleanupNative(JNIEnv* env, jobject /* this */) {
-    LOGD("Cleaning up native hooks...");
-    
-    ImGuiHook::Cleanup();
-    TouchHook::Cleanup();
-    HookEngine::Cleanup();
-    
-    LOGD("Native hooks cleaned up");
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_setMenuVisible(JNIEnv* env, jobject thiz, jboolean visible) {
+    g_menu_visible = visible;
+    TouchHook::SetMenuVisible(visible);
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_reveny_modmenu_MainActivity_isMenuVisible(JNIEnv* env, jobject thiz) {
+    return g_menu_visible;
+}
+
+JNIEXPORT void JNICALL
+Java_com_reveny_modmenu_MainActivity_cleanup(JNIEnv* env, jobject thiz) {
+    if (g_initialized) {
+        TouchHook::Cleanup();
+        g_initialized = false;
+        g_menu_visible = false;
+        LOGD("Mod Menu cleanup completed");
+    }
+}
+
 }
 === END FILE ===

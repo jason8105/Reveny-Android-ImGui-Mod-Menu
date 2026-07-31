@@ -2,8 +2,9 @@
 
 class TouchHook {
 public:
-    static void Init();
+    static void Initialize();
+    static void SetMenuVisible(bool visible);
     static void Cleanup();
-    static void InjectTouch(int x, int y, int action);
+    static bool IsMenuVisible();
 };
 === END FILE ===

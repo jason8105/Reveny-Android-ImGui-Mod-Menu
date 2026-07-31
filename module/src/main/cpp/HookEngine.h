@@ -5,11 +5,9 @@
 
 class HookEngine {
 public:
-    static void Init();
-    static void Cleanup();
-    static void HookAllModules();
-    
-private:
-    static bool initialized;
+    static void PltHookAllModules();
+    static void HookGraphicsFunction(const char* moduleName, const char* functionName, void* hookFunction);
+    static void* GetModuleHandle(const char* moduleName);
+    static void* GetFunctionAddress(const char* moduleName, const char* functionName);
 };
 === END FILE ===

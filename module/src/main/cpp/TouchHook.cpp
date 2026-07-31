@@ -1,32 +1,37 @@
+#include "TouchHook.h"
 #include <jni.h>
 #include <android/input.h>
-#include <android/looper.h>
+#include <android/native_window.h>
+#include <android/native_window_jni.h>
+#include <sys/system_properties.h>
 #include <android/log.h>
-#include <unistd.h>
 
 #define LOG_TAG "TouchHook"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
+#define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)
 
-namespace TouchHook {
-    void Init() {
-        LOGD("TouchHook initialized");
-    }
+static bool g_menu_visible = false;
+static bool g_initialized = false;
 
-    void HookInputQueue() {
-        LOGD("Hooking input queue...");
-        // Hook AInputQueue_getEvent
-    }
+void TouchHook::Initialize() {
+    if (g_initialized) return;
+    
+    LOGD("TouchHook initialized");
+    g_initialized = true;
+}
 
-    bool IsMenuOpen() {
-        return false; // Check if ImGui menu is open
-    }
+void TouchHook::SetMenuVisible(bool visible) {
+    g_menu_visible = visible;
+    LOGD("Menu visibility set to: %d", visible);
+}
 
-    void ProcessTouch(float x, float y, int action) {
-        if (IsMenuOpen()) {
-            // Pass touch to ImGui
-        } else {
-            // Pass touch to game
-        }
-    }
+void TouchHook::Cleanup() {
+    g_menu_visible = false;
+    g_initialized = false;
+    LOGD("TouchHook cleanup completed");
+}
+
+bool TouchHook::IsMenuVisible() {
+    return g_menu_visible;
 }
 === END FILE ===
