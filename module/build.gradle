@@ -1,11 +1,10 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'com.reveny.modmenu'
     compileSdk 34
+    ndkVersion "25.2.9519653"
 
     defaultConfig {
         applicationId "com.reveny.modmenu"
@@ -14,15 +13,15 @@ android {
         versionCode 1
         versionName "1.0"
 
-        ndk {
-            abiFilters 'arm64-v8a'
-        }
-
         externalNativeBuild {
             cmake {
+                cppFlags "-std=c++17 -frtti -fexceptions"
                 arguments "-DANDROID_STL=c++_shared"
-                arguments "-DANDROID_ARM_NEON=TRUE"
             }
+        }
+
+        ndk {
+            abiFilters 'arm64-v8a'
         }
     }
 
@@ -36,11 +35,6 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
-
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
@@ -48,16 +42,28 @@ android {
         }
     }
 
-    buildFeatures {
-        viewBinding true
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+            jni.srcDirs = []
+        }
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+task zipRelease(type: Zip) {
+    from 'build/outputs/apk/debug'
+    archiveFileName = "Reveny-Mod-Menu-${versionName}.zip"
+    destinationDirectory = file("$rootDir/release")
 }
 
 === END FILE ===
