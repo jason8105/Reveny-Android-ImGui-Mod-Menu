@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.reveny.modmenu'
+    namespace 'com.reveny.main'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.reveny.modmenu"
+        applicationId "com.reveny.main"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -15,7 +15,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17 -frtti -fexceptions"
+                cppFlags "-std=c++17"
                 arguments "-DANDROID_STL=c++_shared"
             }
         }
@@ -41,16 +41,11 @@ android {
             version "3.22.1"
         }
     }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
 }
 
 dependencies {
-    implementation 'com.github.YaLTeR:Naked-ImGui:1.1.0'
-    implementation 'com.github.YaLTeR:Naked-ImGui-Zygisk:1.1.0'
-    implementation 'com.github.YaLTeR:Naked-ImGui-Input:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.11.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }
 === END FILE ===

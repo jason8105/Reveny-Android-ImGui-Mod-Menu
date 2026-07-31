@@ -1,11 +1,9 @@
-#ifndef TOUCH_HOOK_H
-#define TOUCH_HOOK_H
+#pragma once
 
-namespace TouchHook {
-    void Init();
-    bool IsMenuVisible();
-    void SetMenuVisible(bool visible);
-}
-
-#endif
+class TouchHook {
+public:
+    static void Init();
+    static void Cleanup();
+    static void InjectTouch(int x, int y, int action);
+};
 === END FILE ===
