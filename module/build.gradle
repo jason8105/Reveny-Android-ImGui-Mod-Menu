@@ -1,29 +1,44 @@
 plugins {
-    id 'com.android.library'
+    id 'com.android.application'
 }
 
 android {
-    namespace 'com.modmenu'
+    namespace 'com.reveny.zygisk'
     compileSdk 34
 
     defaultConfig {
+        applicationId "com.reveny.zygisk"
         minSdk 21
         targetSdk 34
-        ndk {
-            abiFilters 'arm64-v8a'
+        versionCode 1
+        versionName "1.0"
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+                cppFlags "-std=c++17 -fexceptions"
+                abiFilters "arm64-v8a", "armeabi-v7a", "x86_64", "x86"
+            }
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     externalNativeBuild {
         cmake {
             path "../CMakeLists.txt"
+            version "3.22.1"
         }
+    }
+    
+    // Zygisk configuration
+    buildFeatures {
+        buildConfig true
     }
 }
 
