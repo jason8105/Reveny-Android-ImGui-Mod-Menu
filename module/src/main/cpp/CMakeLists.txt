@@ -1,56 +1,31 @@
 cmake_minimum_required(VERSION 3.22.1)
 
-project("RevenyImGui")
+project("RevenyModMenu")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_library(
-    reveny
-    SHARED
-    src/main/cpp/native-lib.cpp
-    src/main/cpp/imgui/imgui.cpp
-    src/main/cpp/imgui/imgui_draw.cpp
-    src/main/cpp/imgui/imgui_tables.cpp
-    src/main/cpp/imgui/imgui_widgets.cpp
-    src/main/cpp/imgui/imgui_backend.cpp
-    src/main/cpp/hooks/HookEngine.cpp
-    src/main/cpp/hooks/TouchHook.cpp
+add_library(RevenyModMenu SHARED
+    src/main/cpp/main.cpp
+    src/main/cpp/HookEngine.cpp
+    src/main/cpp/TouchHook.cpp
+    src/main/cpp/ImGuiHook.cpp
 )
 
-target_include_directories(
-    reveny
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/main/cpp
-    ${CMAKE_SOURCE_DIR}/src/main/cpp/imgui
-)
-
-find_library(
-    log-lib
+target_link_libraries(RevenyModMenu
     log
-)
-
-find_library(
-    android-lib
     android
-)
-
-find_library(
-    egl-lib
     EGL
+    GLESv3
+    jnigraphics
 )
 
-find_library(
-    gpu-lib
-    OpenGLESv3
-)
+find_library(egl-lib EGL)
+find_library(glesv2-lib GLESv2)
 
-target_link_libraries(
-    reveny
-    ${log-lib}
-    ${android-lib}
+target_link_libraries(RevenyModMenu
     ${egl-lib}
-    ${gpu-lib}
+    ${glesv2-lib}
 )
 === END FILE ===

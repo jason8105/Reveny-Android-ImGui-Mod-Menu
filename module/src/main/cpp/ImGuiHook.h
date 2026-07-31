@@ -2,8 +2,7 @@
 
 class ImGuiHook {
 public:
-    static void init();
-    static void cleanup();
-    static void render();
+    static void Initialize();
+    static void Render();
 };
 === END FILE ===
