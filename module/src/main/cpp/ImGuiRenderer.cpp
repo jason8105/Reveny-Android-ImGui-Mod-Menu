@@ -1,16 +1,22 @@
-#include "ImGuiRenderer.h"
-#include "imgui.h"
-#include "backends/imgui_impl_android.h"
-#include "backends/imgui_impl_opengl3.h"
+#include <jni.h>
+#include <android/log.h>
+#include <EGL/egl.h>
+#include <GLES3/gl3.h>
+
+#define LOG_TAG "ImGuiRenderer"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 namespace ImGuiRenderer {
+    void Init() {
+        LOGD("ImGuiRenderer initialized");
+    }
+
     void Render() {
-        ImGui::SetNextWindowPos(ImVec2(10, 10));
-        ImGui::SetNextWindowSize(ImVec2(300, 400));
-        
-        ImGui::Begin("Mod Menu");
-        ImGui::Text("Reveny Mod Menu");
-        ImGui::End();
+        // Render ImGui overlay
+    }
+
+    void SwapBuffers() {
+        // Handle buffer swap with ImGui rendering
     }
 }
 === END FILE ===

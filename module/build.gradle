@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.reveny.main'
+    namespace 'com.reveny.modmenu'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.reveny.main"
+        applicationId "com.reveny.modmenu"
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -15,7 +15,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++17"
+                cppFlags "-std=c++17 -frtti -fexceptions"
                 arguments "-DANDROID_STL=c++_shared"
             }
         }
@@ -41,11 +41,18 @@ android {
             version "3.22.1"
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.github.GitHub-Mod-Menu:ImGui:1.8.9'
+    implementation 'com.github.GitHub-Mod-Menu:Hook:1.8.9'
 }
 === END FILE ===

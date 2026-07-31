@@ -1,24 +1,21 @@
-cmake_minimum_required(VERSION 3.18.1)
+cmake_minimum_required(VERSION 3.22.1)
 
-project("RevenyImGui")
+project("RevenyModMenu")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+add_library(${CMAKE_PROJECT_NAME} SHARED
+    src/main/cpp/main.cpp
+    src/main/cpp/HookEngine.cpp
+    src/main/cpp/TouchHook.cpp
+    src/main/cpp/ImGuiRenderer.cpp
+)
 
 find_library(log-lib log)
 
-add_library(RevenyImGui SHARED
-    src/main/cpp/native-lib.cpp
-    src/main/cpp/HookEngine.cpp
-    src/main/cpp/TouchHook.cpp
-    src/main/cpp/ImGuiHook.cpp
-)
-
-target_link_libraries(RevenyImGui
+target_link_libraries(${CMAKE_PROJECT_NAME}
     ${log-lib}
     android
     EGL
