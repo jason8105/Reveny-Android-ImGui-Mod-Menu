@@ -9,4 +9,8 @@ Copy code
 defaultConfig {
     applicationId = "com.reveny.modmenu"
     minSdk = 29
-    target
+    targetSdk = 33
+    versionCode = 1
+    versionName = "1.0"
+
+    testInstrumentationRunner = "androidx.test
