@@ -13,4 +13,4 @@ defaultConfig {
     versionCode = 1
     versionName = "1.0"
 
-    testInstrument
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner
