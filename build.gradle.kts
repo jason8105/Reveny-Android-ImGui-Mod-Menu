@@ -8,4 +8,4 @@ compileSdk = 33
 Copy code
 defaultConfig {
     applicationId = "com.reveny.modmenu"
-    minSdk =
+    minSdk
