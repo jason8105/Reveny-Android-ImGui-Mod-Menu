@@ -9,6 +9,4 @@ Copy code
 defaultConfig {
     applicationId = "com.reveny.modmenu"
     minSdk = 29
-    targetSdk = 33
-    versionCode = 1
-    versionName =
+    target
