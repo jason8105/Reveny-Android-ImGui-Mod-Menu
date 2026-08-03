@@ -1,35 +1,30 @@
-name: Build Zygisk Module
+name: Build Android Zygisk Mod Menu
+
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        distribution: temurin
-        java-version: 17
+        distribution: 'temurin'
+        java-version: '17'
+        cache: gradle
 
-    - name: Cache Gradle packages
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-
-    - name: Set up CMake
+    - name: Get CMake
       uses: lukka/get-cmake@latest
       with:
         cmakeVersion: '3.28.0'
@@ -37,17 +32,15 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x ./gradlew
 
-    - name: Build with Gradle
+    - name: Assemble Debug Module and Package Zip
       run: ./gradlew :module:assembleDebug
 
-    - name: Locate Built Files
-      run: |
-        echo "=== Searching for compiled outputs ==="
-        find . -name "*.zip" -o -name "*.apk" -o -name "*.so"
-
- - name: Upload Artifact
-  uses: actions/upload-artifact@v4
-  with:
-    name: zygisk-mod-menu
-    path: module/build/outputs/**
-    if-no-files-found: error
+    - name: Upload Module Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: zygisk-mod-menu
+        path: |
+          module/build/outputs/
+          **/*.zip
+          **/*.apk
+        if-no-files-found: error

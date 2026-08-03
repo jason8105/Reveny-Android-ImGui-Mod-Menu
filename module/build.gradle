@@ -5,19 +5,19 @@ plugins {
 android {
     namespace 'com.reveny.mod'
     compileSdk 34
-    
+
     defaultConfig {
         applicationId "com.reveny.mod"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
-        
+
         ndk {
             abiFilters 'arm64-v8a'
         }
     }
-    
+
     buildTypes {
         release {
             minifyEnabled false
@@ -27,12 +27,12 @@ android {
             minifyEnabled false
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    
+
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
@@ -44,4 +44,30 @@ android {
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
-=== END FILE ===
+
+// =======================================================
+// MAGISK / ZYGISK ZIP PACKAGING TASK
+// =======================================================
+task zipMagiskModule(type: Zip) {
+    dependsOn 'assembleDebug'
+    
+    archiveFileName = "Reveny-Zygisk-Module-v${android.defaultConfig.versionName}.zip"
+    destinationDirectory = file("$buildDir/outputs/")
+
+    // Include Magisk metadata & scripts
+    from("${projectDir}/module.prop")
+    from("${projectDir}/zygisk.sh")
+    
+    // Include compiled 64-bit native library (.so) into zygisk/ arm64-v8a directory
+    into("zygisk") {
+        from("$buildDir/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/")
+        include "*.so"
+    }
+}
+
+// Automatically trigger Zip task when running assemble or build
+afterEvaluate {
+    tasks.named("assembleDebug").configure {
+        finalizedBy("zipMagiskModule")
+    }
+}
