@@ -3,8 +3,6 @@ name: Build Android Zygisk Mod Menu
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -41,6 +39,4 @@ jobs:
         name: zygisk-mod-menu
         path: |
           module/build/outputs/
-          **/*.zip
-          **/*.apk
         if-no-files-found: error

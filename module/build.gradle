@@ -45,27 +45,21 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
 }
 
-// =======================================================
-// MAGISK / ZYGISK ZIP PACKAGING TASK
-// =======================================================
 task zipMagiskModule(type: Zip) {
     dependsOn 'assembleDebug'
     
     archiveFileName = "Reveny-Zygisk-Module-v${android.defaultConfig.versionName}.zip"
     destinationDirectory = file("$buildDir/outputs/")
 
-    // Include Magisk metadata & scripts
     from("${projectDir}/module.prop")
     from("${projectDir}/zygisk.sh")
     
-    // Include compiled 64-bit native library (.so) into zygisk/ arm64-v8a directory
     into("zygisk") {
         from("$buildDir/intermediates/stripped_native_libs/debug/out/lib/arm64-v8a/")
         include "*.so"
     }
 }
 
-// Automatically trigger Zip task when running assemble or build
 afterEvaluate {
     tasks.named("assembleDebug").configure {
         finalizedBy("zipMagiskModule")
