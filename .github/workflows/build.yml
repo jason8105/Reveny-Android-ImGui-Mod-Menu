@@ -45,13 +45,9 @@ jobs:
         echo "=== Searching for compiled outputs ==="
         find . -name "*.zip" -o -name "*.apk" -o -name "*.so"
 
-       - name: Upload Module Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: zygisk-mod-menu
-        path: |
-          **/build/outputs/
-          **/*.zip
-          **/*.apk
-        if-no-files-found: error
-
+ - name: Upload Artifact
+  uses: actions/upload-artifact@v4
+  with:
+    name: zygisk-mod-menu
+    path: module/build/outputs/**
+    if-no-files-found: error
